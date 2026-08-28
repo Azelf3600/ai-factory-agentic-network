@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 # CENTRALIZED PIPELINE CONFIGURATION
 # ==============================================================================
 # Update this single constant to change the model across all agent nodes.
-DEFAULT_MODEL = "gemini-3.6-flash"
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
 
 
 # ==============================================================================
@@ -24,7 +24,17 @@ class Company(BaseModel):
     """One company entry in the master dataset. Built by the Company Ingestion Agent."""
     name: str
     ticker: Optional[str] = None
-    segment: str  # e.g. "Networking", "Compute/GPUs", "Cooling", "Hyperscaler"
+    segment: Literal[
+        "Compute / Servers",
+        "Networking",
+        "Power Infrastructure",
+        "Cooling Systems",
+        "Engineering & Construction"
+    ]
+    ai_revenue_exposure_pct: float = Field(
+        default=0.0, 
+        description="Revenue exposure to AI Factory builds (% of total revenue, e.g., 65.0 for 65%)"
+    )
     is_public: bool = True
     description: Optional[str] = None
 
@@ -64,10 +74,12 @@ class RankedCompany(BaseModel):
     company: str
     ticker: Optional[str] = None
     segment: str
+    ai_revenue_exposure_pct: float
     moat_score: int
-    margin_score: int
+    operating_margin_pct: float
     growth_cagr_pct: float
-    tafgs_score: float
+    risk_notes: Optional[str] = None
+    tafgs_score: float  # Total AI Factory Growth Score
 
 
 class PipelineState(TypedDict, total=False):

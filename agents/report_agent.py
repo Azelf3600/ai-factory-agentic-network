@@ -1,160 +1,93 @@
 """
-REPORT AGENT — Generates an investor-ready Top 20 output.
+Report Synthesis Agent for the AI Factory Growth Equity Pipeline.
 
-1. Read candidate companies and analysis from state
-2. Call Gemini with Pydantic structured output validation
-3. Format output and write directly to state["final_report"]
+Aggregates structured data across all pipeline stages into a comprehensive,
+markdown-formatted investment report fulfilling key deliverable requirements.
 """
 
-import os
-import sys
-import time
-from typing import Any, Dict, List, Optional
-
-from langchain_core.prompts import ChatPromptTemplate
+import json
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langgraph.graph import END, StateGraph
-from pydantic import BaseModel, Field
+from schema import DEFAULT_MODEL, PipelineState
 
-# Ensure parent directory is in sys.path so schema.py can be imported anywhere
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from schema import DEFAULT_MODEL
+REPORT_PROMPT_TEMPLATE = """ You are a Principal Growth Equity Analyst synthesizing an executive investment report for an AI Infrastructure fund.
 
-# Fallback for Colab Secret loading
-if "GOOGLE_API_KEY" not in os.environ:
-    try:
-        from google.colab import userdata
+Synthesize the provided pipeline state into a clean Markdown report. Ensure ALL required sections and deliverables are fully represented.
 
-        os.environ["GOOGLE_API_KEY"] = userdata.get("GOOGLE_API_KEY")
-    except ImportError:
-        pass
+### MANDATORY REPORT STRUCTURE:
 
-# ---- 1. Set up the LLM ----
-llm = ChatGoogleGenerativeAI(
-    model=DEFAULT_MODEL,
-    google_api_key=os.environ.get("GOOGLE_API_KEY"),
-    max_retries=5,
-)
+# AI Infrastructure & Hardware Ecosystem: Top 20 Strategic Investment Opportunities
+
+## 1. Executive Summary
+Provide a high-level overview of current AI infrastructure spending patterns and investment priorities.
+
+## 2. AI Factory Value-Chain Mapping
+Provide estimated capital distribution weights (% share of AI Factory dollar spend) across the 5 core segments:
+- **Compute / Servers (GPUs, AI servers)**: [Estimated % Spend]
+- **Networking (Ethernet, InfiniBand, optical)**: [Estimated % Spend]
+- **Power Infrastructure (generators, UPS, switchgear)**: [Estimated % Spend]
+- **Cooling Systems (liquid cooling, chillers)**: [Estimated % Spend]
+- **Engineering & Construction (design, commissioning)**: [Estimated % Spend]
+
+*Rank Data Center Infrastructure priorities based on current capital allocation bottlenecks.*
+
+## 3. Top 20 AI Factory Growth Ranking (Master Table)
+Render a Markdown table containing ALL 20 entries ranked by Total AI Factory Growth Score (TAFGS).
+| Rank | Company | Ticker | Primary Segment | AI Rev Exposure (%) | Moat Score (0-5) | Op Margin (%) | 3-Yr CAGR (%) | TAFGS Score |
+|---|---|---|---|---|---|---|---|---|
+
+## 4. Detailed Company Profiles (Top 20)
+For EACH of the 20 ranked entries, construct a structured profile:
+
+### Rank [Rank Number]: [Company Name] ([Ticker if public])
+- **Primary AI Factory Role:** [Role/Segment]
+- **Moat & Differentiation Narrative:** [Qualitative moat narrative]
+- **Operating Margin Profile:** [Normalized operating margin % and source context]
+- **AI-Driven Growth Catalysts (2026–2029):** [3-year growth drivers and forecast details]
+- **Key Risks:** [Execution, customer concentration, cyclicality, supply risks]
+- **Final Growth Score (TAFGS):** [Score]
+
+## 5. Industry Risk Factors & Recommendation
+Synthesize macroeconomic risk factors and outline explicit due-diligence recommendations.
+
+---
+Pipeline State Data:
+Companies & Rankings Data:
+{rankings_json}
+Moat Scores:
+{moats_json}
+Margin Scores:
+{margins_json}
+Growth Forecasts:
+{growth_json}
+Risk Adjustments:
+{risk_json}
+"""
 
 
-# ---- 2. Define structured output schema ----
-class RankedCompany(BaseModel):
-    rank: int = Field(description="Ranking position from 1 to 20.")
-    company_name: str = Field(description="Name of the evaluated company.")
-    core_innovation: str = Field(
-        description="Key AI technology or competitive advantage."
+def report_agent_node(state: PipelineState) -> dict:
+    """Agent node that formats pipeline metrics into the final executive report."""
+    llm = ChatGoogleGenerativeAI(model=DEFAULT_MODEL, temperature=0.2)
+
+    # Serialize internal pipeline state data for LLM context
+    rankings_json = json.dumps(state.get("rankings", []), indent=2, default=str)
+    moats_json = json.dumps(state.get("moat_scores", []), indent=2, default=str)
+    margins_json = json.dumps(state.get("margin_scores", []), indent=2, default=str)
+    growth_json = json.dumps(
+        state.get("growth_forecasts", []), indent=2, default=str
     )
-    market_potential: str = Field(
-        description="TAM/SAM or growth trajectory potential."
-    )
-    investment_thesis: str = Field(description="Concise investment thesis.")
-    risk_level: str = Field(
-        description="Risk assessment rating (Low, Medium, High)."
-    )
-    key_metrics: Dict[str, str] = Field(description="Key company metrics.")
-
-
-class Top20ReportSchema(BaseModel):
-    report_title: str = Field(description="Title of the report.")
-    executive_summary: str = Field(
-        description="High-level synthesis of top companies."
-    )
-    macro_investment_trends: List[str] = Field(
-        description="Key market trends."
-    )
-    top_20_companies: List[RankedCompany] = Field(
-        description="List of top companies ranked."
-    )
-    key_risk_factors: List[str] = Field(description="Industry-wide risk factors.")
-    recommendation_next_steps: str = Field(description="Actionable next steps.")
-
-
-# ---- 3. The node function (report_node) ----
-def report_node(state: dict) -> dict:
-    """Produces investor-ready Top 20 output and updates state['final_report']."""
-    # Pull data using the keys defined in PipelineState
-    companies_data = state.get("companies", [])
-    rankings_data = state.get("rankings", [])
-    moat_scores = state.get("moat_scores", [])
-    margin_scores = state.get("margin_scores", [])
-
-    context_summary = {
-        "rankings": rankings_data,
-        "moats": moat_scores,
-        "margins": margin_scores,
-    }
-
-    structured_llm = llm.with_structured_output(Top20ReportSchema)
-
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                "You are a VC Investment Partner generating an investor-ready Top 20 report.",
-            ),
-            (
-                "human",
-                "Evaluate these companies and generate the report:\nCompanies: {companies}\nContext: {context}",
-            ),
-        ]
+    risk_json = json.dumps(
+        state.get("risk_adjustments", []), indent=2, default=str
     )
 
-    formatted_prompt = prompt.format_messages(
-        companies=str(companies_data), context=str(context_summary)
+    prompt = REPORT_PROMPT_TEMPLATE.format(
+        rankings_json=rankings_json,
+        moats_json=moats_json,
+        margins_json=margins_json,
+        growth_json=growth_json,
+        risk_json=risk_json,
     )
 
-    time.sleep(2)  # Cooldown to avoid 429 rate limit errors
+    response = llm.invoke(prompt)
 
-    validated_output: Top20ReportSchema = structured_llm.invoke(formatted_prompt)
-
-    # Format structured schema object into clean text for state['final_report']
-    report_dict = validated_output.model_dump()
-    formatted_report_text = f"# {report_dict['report_title']}\n\n"
-    formatted_report_text += f"## Executive Summary\n{report_dict['executive_summary']}\n\n"
-    
-    formatted_report_text += "## Macro Investment Trends\n"
-    for trend in report_dict['macro_investment_trends']:
-        formatted_report_text += f"- {trend}\n"
-        
-    formatted_report_text += "\n## Top Ranked Companies\n"
-    for comp in report_dict['top_20_companies']:
-        formatted_report_text += f"### Rank {comp['rank']}: {comp['company_name']}\n"
-        formatted_report_text += f"- **Thesis:** {comp['investment_thesis']}\n"
-        formatted_report_text += f"- **Core Innovation:** {comp['core_innovation']}\n"
-        formatted_report_text += f"- **Market Potential:** {comp['market_potential']}\n"
-        formatted_report_text += f"- **Risk Level:** {comp['risk_level']}\n\n"
-
-    formatted_report_text += "## Industry Risk Factors\n"
-    for risk in report_dict['key_risk_factors']:
-        formatted_report_text += f"- {risk}\n"
-
-    formatted_report_text += f"\n## Recommendation & Next Steps\n{report_dict['recommendation_next_steps']}\n"
-
-    # Return key matching PipelineState schema
-    return {
-        "final_report": formatted_report_text
-    }
-
-
-# ---- 4. Minimal graph to run standalone ----
-if __name__ == "__main__":
-    print("--- Running report_agent.py (report_node) Standalone ---")
-
-    graph = StateGraph(dict)
-    graph.add_node("report_node", report_node)
-    graph.set_entry_point("report_node")
-    graph.add_edge("report_node", END)
-    app = graph.compile()
-
-    output = app.invoke(
-        {
-            "companies": [
-                {"name": "NVIDIA", "ticker": "NVDA"},
-                {"name": "AMD", "ticker": "AMD"},
-            ],
-            "rankings": [{"company": "NVIDIA", "rank": 1}],
-        }
-    )
-
-    print("\n--- Output Saved to state['final_report'] ---")
-    print(output.get("final_report"))
+    # Return updated state key dictionary expected by LangGraph
+    return {"final_report": response.content}
