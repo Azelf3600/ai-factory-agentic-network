@@ -1,9 +1,9 @@
 """
 REPORT AGENT — Generates an investor-ready Top 20 output.
 
-1. Read candidate companies from state
+1. Read candidate companies and analysis from state
 2. Call Gemini with Pydantic structured output validation
-3. Save structured report directly into state["report_result"]
+3. Format output and write directly to state["final_report"]
 """
 
 import os
@@ -33,7 +33,6 @@ if "GOOGLE_API_KEY" not in os.environ:
 llm = ChatGoogleGenerativeAI(
     model=DEFAULT_MODEL,
     google_api_key=os.environ.get("GOOGLE_API_KEY"),
-    temperature=0.2,
     max_retries=5,
 )
 
@@ -72,9 +71,18 @@ class Top20ReportSchema(BaseModel):
 
 # ---- 3. The node function (report_node) ----
 def report_node(state: dict) -> dict:
-    """Produces investor-ready Top 20 output and updates state['report_result']."""
-    companies_data = state.get("candidate_companies", [])
-    analysis_context = state.get("analysis_data", {})
+    """Produces investor-ready Top 20 output and updates state['final_report']."""
+    # Pull data using the keys defined in PipelineState
+    companies_data = state.get("companies", [])
+    rankings_data = state.get("rankings", [])
+    moat_scores = state.get("moat_scores", [])
+    margin_scores = state.get("margin_scores", [])
+
+    context_summary = {
+        "rankings": rankings_data,
+        "moats": moat_scores,
+        "margins": margin_scores,
+    }
 
     structured_llm = llm.with_structured_output(Top20ReportSchema)
 
@@ -86,24 +94,46 @@ def report_node(state: dict) -> dict:
             ),
             (
                 "human",
-                "Evaluate these companies and generate the report:\n{companies}\nContext: {context}",
+                "Evaluate these companies and generate the report:\nCompanies: {companies}\nContext: {context}",
             ),
         ]
     )
 
     formatted_prompt = prompt.format_messages(
-        companies=str(companies_data), context=str(analysis_context)
+        companies=str(companies_data), context=str(context_summary)
     )
 
     time.sleep(2)  # Cooldown to avoid 429 rate limit errors
 
-    validated_output: Top20ReportSchema = structured_llm.invoke(
-        formatted_prompt
-    )
+    validated_output: Top20ReportSchema = structured_llm.invoke(formatted_prompt)
 
-    # Save to exact required key: state["report_result"]
-    state["report_result"] = validated_output.model_dump()
-    return state
+    # Format structured schema object into clean text for state['final_report']
+    report_dict = validated_output.model_dump()
+    formatted_report_text = f"# {report_dict['report_title']}\n\n"
+    formatted_report_text += f"## Executive Summary\n{report_dict['executive_summary']}\n\n"
+    
+    formatted_report_text += "## Macro Investment Trends\n"
+    for trend in report_dict['macro_investment_trends']:
+        formatted_report_text += f"- {trend}\n"
+        
+    formatted_report_text += "\n## Top Ranked Companies\n"
+    for comp in report_dict['top_20_companies']:
+        formatted_report_text += f"### Rank {comp['rank']}: {comp['company_name']}\n"
+        formatted_report_text += f"- **Thesis:** {comp['investment_thesis']}\n"
+        formatted_report_text += f"- **Core Innovation:** {comp['core_innovation']}\n"
+        formatted_report_text += f"- **Market Potential:** {comp['market_potential']}\n"
+        formatted_report_text += f"- **Risk Level:** {comp['risk_level']}\n\n"
+
+    formatted_report_text += "## Industry Risk Factors\n"
+    for risk in report_dict['key_risk_factors']:
+        formatted_report_text += f"- {risk}\n"
+
+    formatted_report_text += f"\n## Recommendation & Next Steps\n{report_dict['recommendation_next_steps']}\n"
+
+    # Return key matching PipelineState schema
+    return {
+        "final_report": formatted_report_text
+    }
 
 
 # ---- 4. Minimal graph to run standalone ----
@@ -118,14 +148,13 @@ if __name__ == "__main__":
 
     output = app.invoke(
         {
-            "candidate_companies": [
+            "companies": [
                 {"name": "NVIDIA", "ticker": "NVDA"},
                 {"name": "AMD", "ticker": "AMD"},
-            ]
+            ],
+            "rankings": [{"company": "NVIDIA", "rank": 1}],
         }
     )
 
-    print("\n--- Output Saved to state['report_result'] ---")
-    print(
-        "Report Title:", output.get("report_result", {}).get("report_title")
-    )
+    print("\n--- Output Saved to state['final_report'] ---")
+    print(output.get("final_report"))
