@@ -6,10 +6,20 @@ Do NOT change field names/types without syncing the whole team first —
 this is exactly the kind of change that breaks everyone else's agent.
 """
 
+import operator
+from typing import Annotated, Any, List, Literal, Optional, TypedDict, Union
 from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
+
+# ==============================================================================
+# CENTRALIZED PIPELINE CONFIGURATION
+# ==============================================================================
+# Update this single constant to change the model across all agent nodes.
+DEFAULT_MODEL = "gemini-3.6-flash"
 
 
+# ==============================================================================
+# SHARED PIPELINE SCHEMAS
+# ==============================================================================
 class Company(BaseModel):
     """One company entry in the master dataset. Built by the Company Ingestion Agent."""
     name: str
@@ -60,17 +70,18 @@ class RankedCompany(BaseModel):
     tafgs_score: float
 
 
-class PipelineState(BaseModel):
+class PipelineState(TypedDict, total=False):
     """
     The full shared state object passed through the LangGraph pipeline.
-    Each agent node reads what it needs and appends its own output —
-    nobody should overwrite another agent's section of this object.
+    Uses TypedDict with operator.add reducers to safely handle concurrent
+    appends during parallel agent execution without state update collisions.
     """
-    segments: List[str] = []
-    companies: List[Company] = []
-    moat_scores: List[MoatScore] = []
-    margin_scores: List[MarginScore] = []
-    growth_forecasts: List[GrowthForecast] = []
-    risk_adjustments: List[RiskAdjustment] = []
-    rankings: List[RankedCompany] = []
-    final_report: str = ""
+    company_name: str
+    segments: List[str]
+    companies: List[Union[Company, dict, Any]]
+    moat_scores: Annotated[List[Union[MoatScore, dict, Any]], operator.add]
+    margin_scores: Annotated[List[Union[MarginScore, dict, Any]], operator.add]
+    growth_forecasts: Annotated[List[Union[GrowthForecast, dict, Any]], operator.add]
+    risk_adjustments: Annotated[List[Union[RiskAdjustment, dict, Any]], operator.add]
+    rankings: List[Union[RankedCompany, dict, Any]]
+    final_report: str

@@ -6,10 +6,16 @@ and services) for a given company.
 """
 
 import os
+import sys
 from typing import List, Optional
+
 from langgraph.graph import StateGraph, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
+
+# Ensure parent directory is in sys.path so schema.py can be imported anywhere
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from schema import DEFAULT_MODEL
 
 # Fallback for Colab Secret loading
 if "GOOGLE_API_KEY" not in os.environ:
@@ -21,7 +27,7 @@ if "GOOGLE_API_KEY" not in os.environ:
 
 # ---- 1. Set up the LLM ----
 llm = ChatGoogleGenerativeAI(
-    model="gemini-3.5-flash",  # Active model for your API key
+    model=DEFAULT_MODEL,
     google_api_key=os.environ.get("GOOGLE_API_KEY"),
 )
 
