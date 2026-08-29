@@ -1,93 +1,58 @@
-"""
-Report Synthesis Agent for the AI Factory Growth Equity Pipeline.
+"""REPORT SYNTHESIS AGENT"""
 
-Aggregates structured data across all pipeline stages into a comprehensive,
-markdown-formatted investment report fulfilling key deliverable requirements.
-"""
-
+import os
+import sys
 import json
 from langchain_google_genai import ChatGoogleGenerativeAI
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, PipelineState
 
-REPORT_PROMPT_TEMPLATE = """ You are a Principal Growth Equity Analyst synthesizing an executive investment report for an AI Infrastructure fund.
+def report_agent_node(state: PipelineState) -> dict:
+    llm = ChatGoogleGenerativeAI(
+        model=DEFAULT_MODEL,
+        google_api_key=os.environ.get("GOOGLE_API_KEY"),
+        temperature=0.2,
+    )
+    rankings_json = json.dumps(state.get("rankings", []), indent=2)
 
-Synthesize the provided pipeline state into a clean Markdown report. Ensure ALL required sections and deliverables are fully represented.
+    prompt = f"""
+You are a Lead Growth Equity Analyst. Generate a comprehensive Executive AI Infrastructure Report based on this dataset of 20 evaluated companies:
 
-### MANDATORY REPORT STRUCTURE:
-
-# AI Infrastructure & Hardware Ecosystem: Top 20 Strategic Investment Opportunities
-
-## 1. Executive Summary
-Provide a high-level overview of current AI infrastructure spending patterns and investment priorities.
-
-## 2. AI Factory Value-Chain Mapping
-Provide estimated capital distribution weights (% share of AI Factory dollar spend) across the 5 core segments:
-- **Compute / Servers (GPUs, AI servers)**: [Estimated % Spend]
-- **Networking (Ethernet, InfiniBand, optical)**: [Estimated % Spend]
-- **Power Infrastructure (generators, UPS, switchgear)**: [Estimated % Spend]
-- **Cooling Systems (liquid cooling, chillers)**: [Estimated % Spend]
-- **Engineering & Construction (design, commissioning)**: [Estimated % Spend]
-
-*Rank Data Center Infrastructure priorities based on current capital allocation bottlenecks.*
-
-## 3. Top 20 AI Factory Growth Ranking (Master Table)
-Render a Markdown table containing ALL 20 entries ranked by Total AI Factory Growth Score (TAFGS).
-| Rank | Company | Ticker | Primary Segment | AI Rev Exposure (%) | Moat Score (0-5) | Op Margin (%) | 3-Yr CAGR (%) | TAFGS Score |
-|---|---|---|---|---|---|---|---|---|
-
-## 4. Detailed Company Profiles (Top 20)
-For EACH of the 20 ranked entries, construct a structured profile:
-
-### Rank [Rank Number]: [Company Name] ([Ticker if public])
-- **Primary AI Factory Role:** [Role/Segment]
-- **Moat & Differentiation Narrative:** [Qualitative moat narrative]
-- **Operating Margin Profile:** [Normalized operating margin % and source context]
-- **AI-Driven Growth Catalysts (2026–2029):** [3-year growth drivers and forecast details]
-- **Key Risks:** [Execution, customer concentration, cyclicality, supply risks]
-- **Final Growth Score (TAFGS):** [Score]
-
-## 5. Industry Risk Factors & Recommendation
-Synthesize macroeconomic risk factors and outline explicit due-diligence recommendations.
-
----
-Pipeline State Data:
-Companies & Rankings Data:
 {rankings_json}
-Moat Scores:
-{moats_json}
-Margin Scores:
-{margins_json}
-Growth Forecasts:
-{growth_json}
-Risk Adjustments:
-{risk_json}
+
+Ensure your output contains these 3 distinct sections:
+
+1. AI FACTORY VALUE-CHAIN MAPPING
+- Breakdown of AI Factory capital expenditure across the 5 core layers: Compute/Servers (~60%), Networking (~15%), Power Infrastructure (~15%), Cooling Systems (~7%), and Engineering & Construction (~3%).
+
+2. MASTER RANKINGS TABLE
+- A clean markdown table of all 20 companies sorted by TAFGS Score containing: Rank, Company, Ticker, Segment, Moat Score, Op Margin %, CAGR %, and Final TAFGS Score.
+
+3. TOP 20 COMPANY PROFILES
+For EACH of the 20 companies, provide a structured profile including:
+- Rank & TAFGS Score
+- Primary AI Factory Role
+- Moat & Differentiation Narrative
+- Operating Margin Profile
+- AI-Driven Growth Catalysts (2026–2029)
+- Key Risks (e.g., customer concentration, cyclicality, supply chain bottleneck)
 """
 
+    try:
+        response = llm.invoke(prompt)
+        
+        if isinstance(response.content, str):
+            report_text = response.content
+        elif isinstance(response.content, list):
+            report_text = "\n".join([
+                item.get("text", "") if isinstance(item, dict) else str(item)
+                for item in response.content
+            ])
+        else:
+            report_text = str(response.content)
 
-def report_agent_node(state: PipelineState) -> dict:
-    """Agent node that formats pipeline metrics into the final executive report."""
-    llm = ChatGoogleGenerativeAI(model=DEFAULT_MODEL, temperature=0.2)
-
-    # Serialize internal pipeline state data for LLM context
-    rankings_json = json.dumps(state.get("rankings", []), indent=2, default=str)
-    moats_json = json.dumps(state.get("moat_scores", []), indent=2, default=str)
-    margins_json = json.dumps(state.get("margin_scores", []), indent=2, default=str)
-    growth_json = json.dumps(
-        state.get("growth_forecasts", []), indent=2, default=str
-    )
-    risk_json = json.dumps(
-        state.get("risk_adjustments", []), indent=2, default=str
-    )
-
-    prompt = REPORT_PROMPT_TEMPLATE.format(
-        rankings_json=rankings_json,
-        moats_json=moats_json,
-        margins_json=margins_json,
-        growth_json=growth_json,
-        risk_json=risk_json,
-    )
-
-    response = llm.invoke(prompt)
-
-    # Return updated state key dictionary expected by LangGraph
-    return {"final_report": response.content}
+        return {"final_report": report_text}
+    except Exception as e:
+        print(f"[Report Synthesis Error]: {e}")
+        return {"final_report": "Error generating report."}

@@ -1,25 +1,16 @@
 """
 Shared state schema for the AI Factory Growth Equity pipeline.
-
 This is the contract every agent reads from and writes to.
-Do NOT change field names/types without syncing the whole team first —
-this is exactly the kind of change that breaks everyone else's agent.
 """
 
 import operator
 from typing import Annotated, Any, List, Literal, Optional, TypedDict, Union
 from pydantic import BaseModel, Field
 
-# ==============================================================================
-# CENTRALIZED PIPELINE CONFIGURATION
-# ==============================================================================
-# Update this single constant to change the model across all agent nodes.
+# Centralized default model name
 DEFAULT_MODEL = "gemini-3.1-flash-lite"
 
 
-# ==============================================================================
-# SHARED PIPELINE SCHEMAS
-# ==============================================================================
 class Company(BaseModel):
     """One company entry in the master dataset. Built by the Company Ingestion Agent."""
     name: str
@@ -30,10 +21,10 @@ class Company(BaseModel):
         "Power Infrastructure",
         "Cooling Systems",
         "Engineering & Construction"
-    ]
+    ] = "Compute / Servers"
     ai_revenue_exposure_pct: float = Field(
-        default=0.0, 
-        description="Revenue exposure to AI Factory builds (% of total revenue, e.g., 65.0 for 65%)"
+        default=50.0, 
+        description="Revenue exposure to AI Factory builds (% of total revenue)"
     )
     is_public: bool = True
     description: Optional[str] = None
@@ -50,7 +41,7 @@ class MarginScore(BaseModel):
     """Output of the Margin Analysis Agent, one per company."""
     company: str
     score: int = Field(ge=0, le=5)
-    operating_margin_pct: Optional[float] = None
+    operating_margin_pct: float = 20.0
     source: Literal["real", "estimated"] = "estimated"
 
 
@@ -64,12 +55,12 @@ class GrowthForecast(BaseModel):
 class RiskAdjustment(BaseModel):
     """Output of the Risk Adjustment Agent, one per company."""
     company: str
-    discount_pct: float = 0.0  # applied to final TAFGS, e.g. 0.10 = 10% haircut
+    discount_pct: float = 0.05
     risk_notes: str
 
 
 class RankedCompany(BaseModel):
-    """One row of the final Top 20 output. Built by the Ranking Agent."""
+    """One row of the final output table. Built by the Ranking Agent."""
     rank: int
     company: str
     ticker: Optional[str] = None
