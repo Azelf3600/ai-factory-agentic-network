@@ -18,11 +18,8 @@ Before calling the LLM, this agent tries fetch_real_operating_margin()
 per company against yfinance's reported operatingMargins. Only companies
 yfinance can't resolve get sent to the LLM.
 
-THIRD FIX (this version): the LLM-fallback path is now batched. At small
-scale (30 companies) the unresolved remainder was tiny (1-2 companies), but
-at 500 companies more tickers may fail to resolve via yfinance (delisted,
-illiquid, or non-standard exchange formats), so the fallback list itself
-could grow large enough to need chunking too.
+THIRD FIX: the LLM-fallback path is batched, so a large unresolved
+remainder at scale doesn't hit one giant unbatched prompt.
 """
 
 import os
@@ -34,7 +31,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, MarginScore  # noqa: E402
 from agents.utils import fill_missing_with_fallback  # noqa: E402
-from agents.batch_utils import chunk, BATCH_SIZE  # noqa: E402
+from agents.batch_utils import chunk, BATCH_SIZE, invoke_with_retry  # noqa: E402
 from data.real_margin_fetcher import fetch_real_operating_margin  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
@@ -57,7 +54,6 @@ def _bracket_margin_score(operating_margin_pct: float) -> int:
         10-20%  -> 2
         <10%    -> 1
     Never delegate this classification to the LLM — see module docstring.
-    Applied identically whether the margin % came from yfinance or the LLM.
     """
     if operating_margin_pct > 40:
         return 5
@@ -130,7 +126,7 @@ Companies:
 {company_lines}
 """
             try:
-                result: MarginBatchOutput = structured_llm.invoke(prompt)
+                result: MarginBatchOutput = invoke_with_retry(structured_llm, prompt)
                 batch_results = [m.model_dump() for m in result.analysis]
                 if len(batch_results) != len(batch):
                     print(f"[Margin Analysis WARNING] batch of {len(batch)} companies returned "

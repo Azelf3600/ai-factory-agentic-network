@@ -19,17 +19,48 @@ Fixes from previous version:
    in order.
 5. Every ingested company is tagged with ai_revenue_exposure_source so
    downstream agents/report know 50.0 is a placeholder, not a research
-   finding — this pipeline doesn't yet have an agent that actually
-   researches AI revenue exposure %.
+   finding.
 
-NOTE ON SCOPE: data/companies.json was built with 7 segments (including a
-"Compute Platforms & Hyperscalers" segment for Microsoft/Amazon/TSMC/
-Broadcom/Meta). The rest of this pipeline (schema.py, ranking, report) was
-converged on 5 segments. This loader folds the dataset's 7 segments down to
-the pipeline's 5 (hyperscaler segment -> "Compute / Servers", both power
-segments -> "Power Infrastructure") so nothing crashes — but this is a real
-scope decision the team should confirm, not something to leave silently
-decided by a loader function.
+RESOLVED (this version) — SEGMENT-FOLD SCOPE DECISION:
+data/companies.json was built with 7 segments (including a "Compute
+Platforms & Hyperscalers" segment for Microsoft/Amazon/TSMC/Broadcom/
+Meta). schema.py, ranking, and report converged on 5 segments per the
+project brief's Section 3.1 table. This loader folds the 7 segments down
+to 5 (hyperscaler segment -> "Compute / Servers", both power segments ->
+"Power Infrastructure") so nothing crashes downstream.
+
+Previously this fold was described only in a code comment as "a real
+scope decision the team should confirm" with no actual mechanism enforcing
+or preserving that distinction — the concern (hyperscalers play a
+buyer/operator role, not a component-supplier role, so lumping Microsoft
+in with NVIDIA under one segment label risks reading them as
+apples-to-apples) was never structurally tracked anywhere past ingestion.
+
+This version makes the decision explicit and confirmed, and — more
+importantly — makes it AUDITABLE: every company dict now carries two new
+fields alongside its folded `segment`:
+  - `original_segment`: the company's pre-fold segment label exactly as
+    it appears in the source dataset (e.g. "Compute Platforms &
+    Hyperscalers"), preserved for traceability even though `segment`
+    itself is folded to one of the 5 pipeline segments.
+  - `ai_factory_role`: "component_supplier" (default) or "buyer_operator".
+    Set to "buyer_operator" only for companies whose original_segment was
+    "Compute Platforms & Hyperscalers" — i.e. companies that BUY/OPERATE
+    AI Factory infrastructure (Microsoft, Amazon, TSM, Broadcom, Meta,
+    etc.) rather than manufacture a component sold INTO the value chain.
+
+This doesn't change any ranking math or the 5-segment schema — it gives
+Report Agent (and any future analyst) a real field to query/filter/footnote
+on, instead of a scope decision buried in a comment that only a reader of
+this source file would ever see. Report Agent isn't updated in this pass
+to surface it yet; that's a natural next step once this field exists.
+
+Companies loaded via the LLM-generation or static-fallback paths (which
+only ever operate over the 5 pipeline segments, never the 7-segment
+scheme) get `ai_factory_role: "component_supplier"` and
+`original_segment` set equal to their (already 5-segment) `segment` —
+there's no hyperscaler category to distinguish in those paths, so no
+ambiguity exists there in the first place.
 """
 
 import json
@@ -56,12 +87,12 @@ DEFAULT_SEGMENTS = [
     "Engineering & Construction",
 ]
 
-# CONFIRMED (per activity Section 3.1 — 5 segments only): the Day 2 dataset's
+# RESOLVED (per activity Section 3.1 — 5 segments only): the Day 2 dataset's
 # "Compute Platforms & Hyperscalers" segment (Microsoft/Amazon/TSMC/Broadcom/
-# Meta) folds into "Compute / Servers" for this pipeline. Hyperscalers are
-# grouped with compute suppliers here even though they play a buyer/operator
-# role rather than a component-supplier role — flagged in the report so
-# readers don't read the segment column as apples-to-apples within that bucket.
+# Meta) folds into "Compute / Servers" for ranking/report purposes. The
+# buyer/operator vs. component-supplier distinction this fold collapses is
+# now preserved structurally via ai_factory_role below, not just described
+# in prose.
 SEGMENT_FOLD_MAP = {
     "Compute / AI Servers & GPUs": "Compute / Servers",
     "Compute Platforms & Hyperscalers": "Compute / Servers",
@@ -71,6 +102,10 @@ SEGMENT_FOLD_MAP = {
     "Cooling": "Cooling Systems",
     "Engineering & Construction": "Engineering & Construction",
 }
+
+# The one original_segment value that represents a buyer/operator role
+# rather than a component-supplier role within the AI Factory value chain.
+BUYER_OPERATOR_ORIGINAL_SEGMENT = "Compute Platforms & Hyperscalers"
 
 DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "companies_full_universe.json")
 FALLBACK_DATASET_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "companies.json")
@@ -112,11 +147,18 @@ def _load_dataset_file(path: str) -> Optional[List[dict]]:
     for c in raw.get("companies", []):
         if not c.get("is_public", True):
             continue  # private companies excluded from ranking per project scope
-        folded_segment = SEGMENT_FOLD_MAP.get(c["segment"], "Compute / Servers")
+        original_segment = c["segment"]
+        folded_segment = SEGMENT_FOLD_MAP.get(original_segment, "Compute / Servers")
+        ai_factory_role = (
+            "buyer_operator" if original_segment == BUYER_OPERATOR_ORIGINAL_SEGMENT
+            else "component_supplier"
+        )
         companies.append({
             "name": c["name"],
             "ticker": c.get("ticker"),
             "segment": folded_segment,
+            "original_segment": original_segment,
+            "ai_factory_role": ai_factory_role,
             "is_public": True,
             "description": c.get("description", ""),
             "ai_revenue_exposure_pct": c.get("ai_revenue_exposure_pct", 50.0),
@@ -159,6 +201,8 @@ def _generate_via_llm(segments: List[str], per_segment: int = 4) -> List[dict]:
                     "name": c.name,
                     "ticker": c.ticker or "N/A",
                     "segment": segment,
+                    "original_segment": segment,
+                    "ai_factory_role": "component_supplier",
                     "is_public": c.is_public,
                     "description": c.description or "",
                     "ai_revenue_exposure_pct": 50.0,
@@ -186,6 +230,7 @@ def _generate_via_llm(segments: List[str], per_segment: int = 4) -> List[dict]:
         print("[Company Ingestion] LLM generation returned nothing — using static fallback list.")
         companies_list = [
             {**c, "is_public": True, "description": "",
+             "original_segment": c["segment"], "ai_factory_role": "component_supplier",
              "ai_revenue_exposure_pct": 50.0, "ai_revenue_exposure_source": "placeholder"}
             for c in STATIC_FALLBACK_COMPANIES
         ]
@@ -199,6 +244,10 @@ def company_ingestion_node(state: dict) -> dict:
     dataset_companies = _load_static_dataset()
     if dataset_companies:
         print(f"[Company Ingestion] Loaded {len(dataset_companies)} companies from dataset file.")
+        n_buyer_operator = sum(1 for c in dataset_companies if c["ai_factory_role"] == "buyer_operator")
+        if n_buyer_operator:
+            print(f"[Company Ingestion] {n_buyer_operator} companies tagged 'buyer_operator' "
+                  f"(hyperscalers folded into Compute / Servers — see original_segment field).")
         return {"companies": dataset_companies}
 
     print("[Company Ingestion] No dataset file found — generating via LLM instead.")

@@ -21,7 +21,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, AIRevenueExposure  # noqa: E402
 from agents.utils import fill_missing_with_fallback  # noqa: E402
-from agents.batch_utils import chunk, BATCH_SIZE  # noqa: E402
+from agents.batch_utils import chunk, BATCH_SIZE, invoke_with_retry  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
     model=DEFAULT_MODEL,
@@ -76,7 +76,7 @@ Companies:
 {company_lines}
 """
         try:
-            result: ExposureBatchOutput = structured_llm.invoke(prompt)
+            result: ExposureBatchOutput = invoke_with_retry(structured_llm, prompt)
             batch_results = [r.model_dump() for r in result.analysis]
             if len(batch_results) != len(batch):
                 print(f"[AI Revenue Exposure WARNING] batch of {len(batch)} companies returned "
