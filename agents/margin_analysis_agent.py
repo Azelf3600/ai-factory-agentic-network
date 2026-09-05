@@ -13,13 +13,16 @@ Fix: keep the LLM for what it's actually useful for — estimating/recalling
 the operating margin % — but always recompute the 0-5 score deterministically
 in code from that %, overriding whatever bracket the LLM assigned.
 
-SECOND FIX (this version): the margin % itself no longer has to come from
-the LLM at all. Before calling the LLM, this agent now tries
-fetch_real_operating_margin() per company against yfinance's reported
-operatingMargins. Only companies yfinance can't resolve get sent to the
-LLM, and the resulting MarginScore.source field tells you honestly which
-is which ("real" vs "estimated") — this distinction now flows all the way
-through to the master table in report_agent.py.
+SECOND FIX: the margin % itself no longer has to come from the LLM at all.
+Before calling the LLM, this agent tries fetch_real_operating_margin()
+per company against yfinance's reported operatingMargins. Only companies
+yfinance can't resolve get sent to the LLM.
+
+THIRD FIX (this version): the LLM-fallback path is now batched. At small
+scale (30 companies) the unresolved remainder was tiny (1-2 companies), but
+at 500 companies more tickers may fail to resolve via yfinance (delisted,
+illiquid, or non-standard exchange formats), so the fallback list itself
+could grow large enough to need chunking too.
 """
 
 import os
@@ -31,6 +34,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, MarginScore  # noqa: E402
 from agents.utils import fill_missing_with_fallback  # noqa: E402
+from agents.batch_utils import chunk, BATCH_SIZE  # noqa: E402
 from data.real_margin_fetcher import fetch_real_operating_margin  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
@@ -103,15 +107,16 @@ def margin_analysis_node(state: dict) -> dict:
     print(f"[Margin Analysis] {len(real_results)}/{len(company_dicts)} companies "
           f"resolved via yfinance (real). {len(needs_llm)} sent to LLM.")
 
-    # --- Step 2: LLM only for whatever yfinance couldn't resolve ---
-    llm_results = []
+    # --- Step 2: LLM only for whatever yfinance couldn't resolve, batched ---
+    llm_results: List[dict] = []
     if needs_llm:
-        company_lines = "\n".join(
-            f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')})" for c in needs_llm
-        )
-
         structured_llm = llm.with_structured_output(MarginBatchOutput, method="json_schema")
-        prompt = f"""
+
+        for batch in chunk(needs_llm, BATCH_SIZE):
+            company_lines = "\n".join(
+                f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')})" for c in batch
+            )
+            prompt = f"""
 Provide the operating margin % for each company below. Give your best
 estimate of the actual reported operating margin. Return each company's
 exact ticker symbol as given (do not invent or omit it). Mark source as
@@ -124,12 +129,15 @@ focus your effort on getting the margin % itself right.
 Companies:
 {company_lines}
 """
-        try:
-            result: MarginBatchOutput = structured_llm.invoke(prompt)
-            llm_results = [m.model_dump() for m in result.analysis]
-        except Exception as e:
-            print(f"[Margin Analysis Error]: {e}")
-            llm_results = []
+            try:
+                result: MarginBatchOutput = structured_llm.invoke(prompt)
+                batch_results = [m.model_dump() for m in result.analysis]
+                if len(batch_results) != len(batch):
+                    print(f"[Margin Analysis WARNING] batch of {len(batch)} companies returned "
+                          f"{len(batch_results)} results — some may be missing and will fall back to default.")
+                llm_results.extend(batch_results)
+            except Exception as e:
+                print(f"[Margin Analysis Error] batch starting with {batch[0].get('name')}: {e}")
 
         # Always override the LLM's own bracket classification with a
         # deterministic recomputation from the margin % it reported, and

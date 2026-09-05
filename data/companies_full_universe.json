@@ -1,0 +1,713 @@
+{
+  "segments": [
+    "Compute / AI Servers & GPUs",
+    "Compute Platforms & Hyperscalers",
+    "Networking",
+    "Power - Generators & Turbines",
+    "Power - UPS, Switchgear & PDUs",
+    "Cooling",
+    "Engineering & Construction"
+  ],
+  "companies": [
+    {
+      "name": "NVIDIA",
+      "ticker": "NVDA",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Dominant AI GPU/accelerator supplier; CUDA ecosystem lock-in."
+    },
+    {
+      "name": "Dell Technologies",
+      "ticker": "DELL",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "AI server integrator/OEM for hyperscale and enterprise buyers."
+    },
+    {
+      "name": "Hewlett Packard Enterprise",
+      "ticker": "HPE",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "AI server systems and infrastructure, including liquid-cooled racks."
+    },
+    {
+      "name": "Super Micro Computer",
+      "ticker": "SMCI",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "High-density AI server builder, fast product-cycle turnaround."
+    },
+    {
+      "name": "AMD",
+      "ticker": "AMD",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Alternative AI accelerator supplier (Instinct GPU line) to NVIDIA."
+    },
+    {
+      "name": "Intel",
+      "ticker": "INTC",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "CPU/foundry player pursuing AI accelerator and foundry re-entry."
+    },
+    {
+      "name": "Qualcomm",
+      "ticker": "QCOM",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Edge AI and data center inference chip ambitions alongside mobile core business."
+    },
+    {
+      "name": "Micron Technology",
+      "ticker": "MU",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "High-bandwidth memory (HBM) supplier critical to AI accelerator performance."
+    },
+    {
+      "name": "Arm Holdings",
+      "ticker": "ARM",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "CPU architecture/IP licensing used across AI server and edge designs."
+    },
+    {
+      "name": "ASML Holding",
+      "ticker": "ASML",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Sole supplier of EUV lithography equipment required to fabricate leading-edge AI chips - flagged: enabling/equipment layer, not a direct chip designer."
+    },
+    {
+      "name": "Lam Research",
+      "ticker": "LRCX",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor fabrication equipment supplier - flagged: same enabling-layer caveat as ASML."
+    },
+    {
+      "name": "Applied Materials",
+      "ticker": "AMAT",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor fabrication equipment supplier - flagged: same enabling-layer caveat as ASML."
+    },
+    {
+      "name": "KLA Corporation",
+      "ticker": "KLAC",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor process control/inspection equipment - flagged: same enabling-layer caveat as ASML."
+    },
+    {
+      "name": "Western Digital",
+      "ticker": "WDC",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Data center storage supplier for AI training/inference pipelines."
+    },
+    {
+      "name": "Seagate Technology",
+      "ticker": "STX",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Data center storage supplier for AI training/inference pipelines."
+    },
+    {
+      "name": "Pure Storage",
+      "ticker": "PSTG",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Flash storage systems for AI/ML data pipelines."
+    },
+    {
+      "name": "NetApp",
+      "ticker": "NTAP",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Enterprise data storage/management for AI workloads."
+    },
+    {
+      "name": "Astera Labs",
+      "ticker": "ALAB",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Connectivity chips (PCIe/CXL retimers) linking GPUs inside AI server racks."
+    },
+    {
+      "name": "Synopsys",
+      "ticker": "SNPS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "EDA software used to design AI chips - flagged: tooling/software layer, not hardware."
+    },
+    {
+      "name": "Cadence Design Systems",
+      "ticker": "CDNS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "EDA software used to design AI chips - flagged: tooling/software layer, not hardware."
+    },
+    {
+      "name": "Microsoft",
+      "ticker": "MSFT",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Builds/operates AI Factories at scale for Azure + Copilot; major AI capex driver."
+    },
+    {
+      "name": "Alphabet",
+      "ticker": "GOOGL",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Google Cloud AI infrastructure + custom TPU silicon."
+    },
+    {
+      "name": "Amazon",
+      "ticker": "AMZN",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AWS is one of the largest AI Factory operators; Trainium/Inferentia custom silicon."
+    },
+    {
+      "name": "Broadcom",
+      "ticker": "AVGO",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Designs custom AI silicon (e.g. Google TPUs, Meta chips); key compute-layer moat play."
+    },
+    {
+      "name": "Taiwan Semiconductor Manufacturing",
+      "ticker": "TSM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Fabricates nearly all leading-edge AI chips; arguably the single biggest bottleneck in the value chain."
+    },
+    {
+      "name": "Meta Platforms",
+      "ticker": "META",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Builds AI Factories at massive scale, but revenue exposure is indirect (ad-revenue lift, not AI capacity sales) - flagged for team discussion on whether it counts as direct AI Factory growth exposure."
+    },
+    {
+      "name": "Oracle",
+      "ticker": "ORCL",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "OCI cloud infrastructure with large AI training capacity commitments."
+    },
+    {
+      "name": "IBM",
+      "ticker": "IBM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Enterprise AI/hybrid cloud platform (watsonx) and infrastructure services."
+    },
+    {
+      "name": "CoreWeave",
+      "ticker": "CRWV",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "GPU-cloud specialist; pure-play AI Factory capacity provider - verify ticker before running."
+    },
+    {
+      "name": "Nebius Group",
+      "ticker": "NBIS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AI cloud infrastructure operator - verify ticker before running."
+    },
+    {
+      "name": "IREN Limited",
+      "ticker": "IREN",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AI/data center compute operator - verify ticker before running."
+    },
+    {
+      "name": "Applied Digital",
+      "ticker": "APLD",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AI data center developer/operator - verify ticker before running."
+    },
+    {
+      "name": "Digital Realty Trust",
+      "ticker": "DLR",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Data center REIT - flagged: real estate/colocation operator, indirect AI Factory exposure via landlord model."
+    },
+    {
+      "name": "Equinix",
+      "ticker": "EQIX",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Data center REIT - flagged: same indirect/colocation caveat as Digital Realty."
+    },
+    {
+      "name": "OpenAI",
+      "ticker": null,
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": false,
+      "description": "Private AI lab - context only, excluded from ranking per project scope (out-of-scope: private companies)."
+    },
+    {
+      "name": "Anthropic",
+      "ticker": null,
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": false,
+      "description": "Private AI lab - context only, excluded from ranking per project scope (out-of-scope: private companies)."
+    },
+    {
+      "name": "Cisco Systems",
+      "ticker": "CSCO",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Ethernet switching/routing incumbent, competing for AI back-end network share."
+    },
+    {
+      "name": "Arista Networks",
+      "ticker": "ANET",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "High-speed Ethernet switching, strong hyperscaler design wins, high margins."
+    },
+    {
+      "name": "Juniper Networks",
+      "ticker": "JNPR",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Networking hardware/software for data center and AI infrastructure."
+    },
+    {
+      "name": "Marvell Technology",
+      "ticker": "MRVL",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Custom silicon and optical DSPs for hyperscaler AI networking (AWS Trainium, Microsoft Maia)."
+    },
+    {
+      "name": "Ciena Corporation",
+      "ticker": "CIEN",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical networking systems connecting AI data centers."
+    },
+    {
+      "name": "Fabrinet",
+      "ticker": "FN",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Manufactures optical transceivers for AI data center networks."
+    },
+    {
+      "name": "Coherent Corp",
+      "ticker": "COHR",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Lasers and optical transceivers for AI data center networking."
+    },
+    {
+      "name": "Lumentum Holdings",
+      "ticker": "LITE",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical components for high-speed data center interconnects."
+    },
+    {
+      "name": "Extreme Networks",
+      "ticker": "EXTR",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Enterprise/data center networking hardware and software."
+    },
+    {
+      "name": "F5 Inc",
+      "ticker": "FFIV",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Application delivery and traffic management for large-scale data centers."
+    },
+    {
+      "name": "NetScout Systems",
+      "ticker": "NTCT",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Network performance monitoring for large-scale data center operators."
+    },
+    {
+      "name": "Credo Technology",
+      "ticker": "CRDO",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "AEC/optical DSP connectivity chips for AI cluster networking - verify ticker before running."
+    },
+    {
+      "name": "CommScope",
+      "ticker": "COMM",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Connectivity and cabling infrastructure for data centers."
+    },
+    {
+      "name": "GE Vernova",
+      "ticker": "GEV",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Gas turbines for AI Factory power generation."
+    },
+    {
+      "name": "Siemens Energy",
+      "ticker": "ENR.DE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Power generation equipment including gas turbines."
+    },
+    {
+      "name": "Caterpillar",
+      "ticker": "CAT",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Backup/prime power generators for data centers."
+    },
+    {
+      "name": "Cummins",
+      "ticker": "CMI",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Generator sets for data center backup power."
+    },
+    {
+      "name": "Rolls-Royce",
+      "ticker": "RR.L",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Power generation systems including data center power solutions."
+    },
+    {
+      "name": "Generac Holdings",
+      "ticker": "GNRC",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Backup generator systems, expanding into data center power resilience."
+    },
+    {
+      "name": "Constellation Energy",
+      "ticker": "CEG",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Nuclear/power generation utility with direct hyperscaler power-supply deals - flagged: utility/IPP, not equipment OEM."
+    },
+    {
+      "name": "Vistra Corp",
+      "ticker": "VST",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Power generation utility positioning for AI-driven demand growth - flagged: utility/IPP, not equipment OEM."
+    },
+    {
+      "name": "NRG Energy",
+      "ticker": "NRG",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Power generation utility positioning for AI-driven demand growth - flagged: utility/IPP, not equipment OEM."
+    },
+    {
+      "name": "Talen Energy",
+      "ticker": "TLN",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Power generation utility with direct data center power agreements - flagged: utility/IPP, not equipment OEM."
+    },
+    {
+      "name": "NextEra Energy",
+      "ticker": "NEE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Largest US utility/renewables operator, positioning for AI power demand - flagged: utility/IPP, not equipment OEM."
+    },
+    {
+      "name": "Bloom Energy",
+      "ticker": "BE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Fuel cell on-site power generation for data centers."
+    },
+    {
+      "name": "Duke Energy",
+      "ticker": "DUK",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility with growing data center load in service territory - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Southern Company",
+      "ticker": "SO",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility with growing data center load in service territory - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Dominion Energy",
+      "ticker": "D",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility serving Northern Virginia's dense data center corridor - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Vertiv Holdings",
+      "ticker": "VRT",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Leading data center power and thermal management (UPS, PDUs, cooling); pure-play AI Factory infrastructure exposure."
+    },
+    {
+      "name": "Schneider Electric",
+      "ticker": "SU.PA",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "UPS, switchgear, PDUs, and power management across data centers."
+    },
+    {
+      "name": "Eaton",
+      "ticker": "ETN",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power distribution, switchgear, backup power for data centers."
+    },
+    {
+      "name": "ABB",
+      "ticker": "ABBN.SW",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrification and power distribution equipment."
+    },
+    {
+      "name": "Hubbell Incorporated",
+      "ticker": "HUBB",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrical distribution products used in data center power infrastructure."
+    },
+    {
+      "name": "nVent Electric",
+      "ticker": "NVT",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrical connection and protection products for data centers."
+    },
+    {
+      "name": "Emerson Electric",
+      "ticker": "EMR",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power and thermal management systems for data centers."
+    },
+    {
+      "name": "Powell Industries",
+      "ticker": "POWL",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Custom-engineered switchgear, increasingly for data center power distribution."
+    },
+    {
+      "name": "Legrand",
+      "ticker": "LR.PA",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrical and digital infrastructure products for data centers."
+    },
+    {
+      "name": "Delta Electronics",
+      "ticker": "2308.TW",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power supplies and thermal management for data centers - verify ticker/exchange before running."
+    },
+    {
+      "name": "Mitsubishi Electric",
+      "ticker": "6503.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power distribution and UPS equipment for data centers - verify ticker before running."
+    },
+    {
+      "name": "Fuji Electric",
+      "ticker": "6504.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power electronics and UPS systems for data centers - verify ticker before running."
+    },
+    {
+      "name": "Johnson Controls",
+      "ticker": "JCI",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Chillers and cooling systems for data centers."
+    },
+    {
+      "name": "Trane Technologies",
+      "ticker": "TT",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC and cooling systems, growing data center segment."
+    },
+    {
+      "name": "Carrier Global",
+      "ticker": "CARR",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Cooling and climate control systems for data centers."
+    },
+    {
+      "name": "Daikin",
+      "ticker": "6367.T",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Cooling and air conditioning systems supplier."
+    },
+    {
+      "name": "SPX Technologies",
+      "ticker": "SPXC",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Cooling towers for data center thermal management."
+    },
+    {
+      "name": "Modine Manufacturing",
+      "ticker": "MOD",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Liquid cooling solutions (Airedale) with major long-term hyperscaler capacity agreements."
+    },
+    {
+      "name": "Munters Group",
+      "ticker": "MTRS.ST",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Data center climate control/cooling systems - verify ticker/exchange before running."
+    },
+    {
+      "name": "AAON",
+      "ticker": "AAON",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Commercial HVAC equipment, growing data center exposure."
+    },
+    {
+      "name": "Lennox International",
+      "ticker": "LII",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC systems with expanding data center cooling products."
+    },
+    {
+      "name": "Comfort Systems USA",
+      "ticker": "FIX",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Mechanical/HVAC installation contractor for data center cooling systems."
+    },
+    {
+      "name": "Flex Ltd",
+      "ticker": "FLEX",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Manufactures liquid cooling systems and power infrastructure for data centers."
+    },
+    {
+      "name": "Jacobs Solutions",
+      "ticker": "J",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering/design services for data center construction."
+    },
+    {
+      "name": "WSP Global",
+      "ticker": "WSP.TO",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering and design for large infrastructure including data centers."
+    },
+    {
+      "name": "EMCOR Group",
+      "ticker": "EME",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Electrical and mechanical construction for data centers; fast-growing data center revenue segment."
+    },
+    {
+      "name": "Quanta Services",
+      "ticker": "PWR",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Electric power and grid-connection construction for hyperscaler and utility data center projects."
+    },
+    {
+      "name": "AECOM",
+      "ticker": "ACM",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Design, engineering, and program management for large-scale data center infrastructure."
+    },
+    {
+      "name": "Fluor Corporation",
+      "ticker": "FLR",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "EPC contractor capturing large-scale global data center builds."
+    },
+    {
+      "name": "Sterling Infrastructure",
+      "ticker": "STRL",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Site development for mission-critical data center projects - verify ticker before running."
+    },
+    {
+      "name": "MYR Group",
+      "ticker": "MYRG",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Electrical construction contractor serving data center and utility projects."
+    },
+    {
+      "name": "Tetra Tech",
+      "ticker": "TTEK",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering and environmental consulting for large infrastructure including data centers."
+    },
+    {
+      "name": "IES Holdings",
+      "ticker": "IESC",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Electrical/mechanical contracting services for data center infrastructure."
+    },
+    {
+      "name": "Burns & McDonnell",
+      "ticker": null,
+      "segment": "Engineering & Construction",
+      "is_public": false,
+      "description": "Private engineering/construction firm - context only, excluded from ranking per project scope."
+    },
+    {
+      "name": "Turner Construction",
+      "ticker": null,
+      "segment": "Engineering & Construction",
+      "is_public": false,
+      "description": "Private construction firm (part of HOCHTIEF) - context only, excluded from ranking per project scope."
+    },
+    {
+      "name": "HITT Contracting",
+      "ticker": null,
+      "segment": "Engineering & Construction",
+      "is_public": false,
+      "description": "Private construction firm - context only, excluded from ranking per project scope."
+    }
+  ]
+}

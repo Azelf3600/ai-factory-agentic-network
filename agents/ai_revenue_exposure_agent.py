@@ -21,6 +21,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, AIRevenueExposure  # noqa: E402
 from agents.utils import fill_missing_with_fallback  # noqa: E402
+from agents.batch_utils import chunk, BATCH_SIZE  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
     model=DEFAULT_MODEL,
@@ -49,13 +50,17 @@ def ai_revenue_exposure_node(state: dict) -> dict:
         companies = [{"name": state["company_name"]}]
 
     company_dicts = [c if isinstance(c, dict) else c.model_dump() for c in companies]
-    company_lines = "\n".join(
-        f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')}, segment: {c.get('segment', 'unknown')})"
-        for c in company_dicts
-    )
 
     structured_llm = llm.with_structured_output(ExposureBatchOutput, method="json_schema")
-    prompt = f"""
+    all_results: List[dict] = []
+
+    for batch in chunk(company_dicts, BATCH_SIZE):
+        company_lines = "\n".join(
+            f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')}, segment: {c.get('segment', 'unknown')})"
+            for c in batch
+        )
+
+        prompt = f"""
 For each company below, estimate the percentage of its TOTAL revenue that
 comes specifically from AI Factory / hyperscale data center builds (compute,
 networking, power, cooling, or construction tied to AI infrastructure) —
@@ -70,13 +75,15 @@ company's exact ticker as given (do not invent or omit it).
 Companies:
 {company_lines}
 """
+        try:
+            result: ExposureBatchOutput = structured_llm.invoke(prompt)
+            batch_results = [r.model_dump() for r in result.analysis]
+            if len(batch_results) != len(batch):
+                print(f"[AI Revenue Exposure WARNING] batch of {len(batch)} companies returned "
+                      f"{len(batch_results)} results — some may be missing and will fall back to default.")
+            all_results.extend(batch_results)
+        except Exception as e:
+            print(f"[AI Revenue Exposure Error] batch starting with {batch[0].get('name')}: {e}")
 
-    try:
-        result: ExposureBatchOutput = structured_llm.invoke(prompt)
-        results = [r.model_dump() for r in result.analysis]
-    except Exception as e:
-        print(f"[AI Revenue Exposure Error]: {e}")
-        results = []
-
-    results = fill_missing_with_fallback(company_dicts, results, _fallback_exposure, agent_label="AI Revenue Exposure Agent")
+    results = fill_missing_with_fallback(company_dicts, all_results, _fallback_exposure, agent_label="AI Revenue Exposure Agent")
     return {"ai_revenue_exposures": results}
