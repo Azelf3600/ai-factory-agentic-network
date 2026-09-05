@@ -1,12 +1,12 @@
 """
-ASYNC MAIN PIPELINE ORCHESTRATOR
+MAIN PIPELINE ORCHESTRATOR
 """
 
 import os
 import sys
 from langgraph.graph import StateGraph, END
 
-from schema import DEFAULT_MODEL, PipelineState
+from schema import PipelineState
 
 from agents.market_mapping_agent import market_mapping_node
 from agents.company_ingestion_agent import company_ingestion_node
@@ -14,6 +14,7 @@ from agents.moat_analysis_agent import moat_analysis_node
 from agents.margin_analysis_agent import margin_analysis_node
 from agents.growth_forecast_agent import growth_forecast_node
 from agents.risk_adjustment_agent import risk_adjustment_node
+from agents.ai_revenue_exposure_agent import ai_revenue_exposure_node
 from agents.ranking_agent import ranking_node
 from agents.report_agent import report_agent_node
 
@@ -28,6 +29,7 @@ def build_pipeline_graph():
     workflow.add_node("margin_analysis", margin_analysis_node)
     workflow.add_node("growth_forecast", growth_forecast_node)
     workflow.add_node("risk_adjustment", risk_adjustment_node)
+    workflow.add_node("ai_revenue_exposure", ai_revenue_exposure_node)
     workflow.add_node("ranking", ranking_node)
     workflow.add_node("report", report_agent_node)
 
@@ -38,11 +40,13 @@ def build_pipeline_graph():
     workflow.add_edge("company_ingestion", "margin_analysis")
     workflow.add_edge("company_ingestion", "growth_forecast")
     workflow.add_edge("company_ingestion", "risk_adjustment")
+    workflow.add_edge("company_ingestion", "ai_revenue_exposure")
 
     workflow.add_edge("moat_analysis", "ranking")
     workflow.add_edge("margin_analysis", "ranking")
     workflow.add_edge("growth_forecast", "ranking")
     workflow.add_edge("risk_adjustment", "ranking")
+    workflow.add_edge("ai_revenue_exposure", "ranking")
 
     workflow.add_edge("ranking", "report")
     workflow.add_edge("report", END)
@@ -51,31 +55,30 @@ def build_pipeline_graph():
 
 
 if __name__ == "__main__":
-    print("Initializing Parallel AI Factory Growth Equity Pipeline...")
+    print("Initializing AI Factory Growth Equity Pipeline...")
     app = build_pipeline_graph()
 
     initial_state = {
-        "company_name": "NVIDIA",
-        "segments": [
-            "Compute / Servers",
-            "Networking",
-            "Power Infrastructure",
-            "Cooling Systems",
-            "Engineering & Construction"
-        ],
+        "segments": [],
         "companies": [],
         "moat_scores": [],
         "margin_scores": [],
         "growth_forecasts": [],
         "risk_adjustments": [],
+        "ai_revenue_exposures": [],
         "rankings": [],
         "final_report": "",
     }
 
-    print("Executing parallel graph...")
+    print("Executing graph...")
     final_output = app.invoke(initial_state)
 
     print("\n==========================================")
     print("         FINAL INVESTOR REPORT            ")
     print("==========================================\n")
     print(final_output.get("final_report", "No report generated."))
+
+    unmatched = [r for r in final_output.get("rankings", []) if r.get("unmatched")]
+    if unmatched:
+        print(f"\n[WARNING] {len(unmatched)} companies had incomplete agent data: "
+              f"{', '.join(r['company'] for r in unmatched)}")

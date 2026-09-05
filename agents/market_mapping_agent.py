@@ -1,49 +1,49 @@
-"""MARKET MAPPING AGENT"""
+"""
+MARKET MAPPING AGENT
+
+Fix from previous version: this agent used to analyze a single company's
+"spend layers" and write its result to state["market_mapping_result"],
+which nothing downstream ever read — Company Ingestion always fell back to
+its own hardcoded segment list, making this agent a no-op in the graph.
+
+This version does what the project brief's Section 4 table actually asks:
+"Maps AI Factory spend across infrastructure layers" — a one-time mapping
+of the whole value chain, not a per-company lookup — and writes the result
+to state["segments"], which Company Ingestion now genuinely reads.
+"""
 
 import os
 import sys
-from typing import List, Optional
-from langchain_google_genai import ChatGoogleGenerativeAI
-from pydantic import BaseModel
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from schema import DEFAULT_MODEL
 
-llm = ChatGoogleGenerativeAI(
-    model=DEFAULT_MODEL,
-    google_api_key=os.environ.get("GOOGLE_API_KEY"),
-    temperature=0.1,
-)
+# Real spend-share breakdown derived from the Stargate reference material
+# (Servers, Networking, Power [UPS+turbines+switchgear+generators+PDUs],
+# Cooling [towers+chillers+CRAHs], Engineering & Construction), rolled up
+# into the 5 segments the rest of the pipeline uses. Total reference spend
+# ~= $68.4B; percentages below are each layer's share of that total.
+SEGMENT_SPEND_SHARE = {
+    "Compute / Servers": 71.2,
+    "Networking": 12.3,
+    "Power Infrastructure": 9.7,
+    "Cooling Systems": 3.1,
+    "Engineering & Construction": 3.7,
+}
 
-class InfrastructureLayerSpend(BaseModel):
-    layer_name: str
-    estimated_share_pct: Optional[float] = None
-    rationale: str
-    key_vendors_or_partners: List[str] = []
+SEGMENTS = list(SEGMENT_SPEND_SHARE.keys())
 
-class MarketMappingOutput(BaseModel):
-    company_received: str
-    ai_factory_spend_summary: str
-    infrastructure_layers: List[InfrastructureLayerSpend]
-    primary_layer_of_strength: str
-    confidence_level: str
 
 def market_mapping_node(state: dict) -> dict:
-    company_name = state.get("company_name", "NVIDIA")
-    structured_llm = llm.with_structured_output(MarketMappingOutput, method="json_schema")
-    prompt = f"Evaluate {company_name} across AI infrastructure spend layers (Compute, Networking, Power, Cooling)."
-
-    try:
-        result: MarketMappingOutput = structured_llm.invoke(prompt)
-        return {"market_mapping_result": result.model_dump()}
-    except Exception as e:
-        print(f"[Market Mapping Error]: {e}")
-        return {
-            "market_mapping_result": {
-                "company_received": company_name,
-                "ai_factory_spend_summary": "Standard mapping overview.",
-                "infrastructure_layers": [],
-                "primary_layer_of_strength": "Compute",
-                "confidence_level": "Medium"
-            }
-        }
+    """
+    No LLM call needed here — the value-chain layer split is a fixed
+    reference mapping (from the project's own source material), not
+    something that needs to be re-derived at runtime. Keeping this
+    deterministic also means it can't silently drift between pipeline runs.
+    """
+    return {
+        "segments": SEGMENTS,
+        "market_mapping_result": {
+            "segment_spend_share_pct": SEGMENT_SPEND_SHARE,
+            "note": "Derived from AI Factory equipment cost reference data (Stargate breakdown).",
+        },
+    }

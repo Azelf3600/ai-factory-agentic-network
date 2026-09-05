@@ -7,7 +7,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from schema import DEFAULT_MODEL, MoatScore
+from schema import DEFAULT_MODEL, MoatScore  # noqa: E402
+from agents.utils import fill_missing_with_fallback  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
     model=DEFAULT_MODEL,
@@ -15,23 +16,50 @@ llm = ChatGoogleGenerativeAI(
     temperature=0.1,
 )
 
+
 class MoatBatchOutput(BaseModel):
     analysis: List[MoatScore]
+
+
+def _fallback_moat(company: dict) -> dict:
+    return {
+        "company": company.get("name", "Unknown"),
+        "ticker": company.get("ticker"),
+        "score": 3,
+        "rationale": "FALLBACK: no LLM result returned for this company — treat as placeholder, not a real assessment.",
+    }
+
 
 def moat_analysis_node(state: dict) -> dict:
     companies = state.get("companies", [])
     if not companies and "company_name" in state:
         companies = [{"name": state["company_name"]}]
 
-    comp_names = [c.get("name") if isinstance(c, dict) else getattr(c, "name", "Unknown") for c in companies]
-    structured_llm = llm.with_structured_output(MoatBatchOutput, method="json_schema")
+    company_dicts = [c if isinstance(c, dict) else c.model_dump() for c in companies]
 
-    prompt = f"Analyze economic moat (0-5 scale) and short rationale for: {', '.join(comp_names)}"
+    # Send name + ticker explicitly so the model can echo the ticker back —
+    # tickers rarely get reworded the way company names do.
+    company_lines = "\n".join(
+        f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')})" for c in company_dicts
+    )
+
+    structured_llm = llm.with_structured_output(MoatBatchOutput, method="json_schema")
+    prompt = f"""
+Analyze economic moat (0-5 scale) for each of the following companies.
+For EACH company, return its exact ticker symbol as given below (do not
+invent or omit it) along with a short rationale (architectural lock-in,
+ecosystem dominance, switching costs, or supply-chain bottleneck position).
+
+Companies:
+{company_lines}
+"""
 
     try:
         result: MoatBatchOutput = structured_llm.invoke(prompt)
-        return {"moat_scores": [m.model_dump() for m in result.analysis]}
+        results = [m.model_dump() for m in result.analysis]
     except Exception as e:
         print(f"[Moat Analysis Error]: {e}")
-        fallback = [MoatScore(company=name, score=3, rationale="Solid technology position").model_dump() for name in comp_names]
-        return {"moat_scores": fallback}
+        results = []
+
+    results = fill_missing_with_fallback(company_dicts, results, _fallback_moat, agent_label="Moat Analysis Agent")
+    return {"moat_scores": results}

@@ -2,51 +2,103 @@
 
 import os
 import sys
-from typing import List
+from typing import Dict, List
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from schema import RankedCompany
+from schema import RankedCompany  # noqa: F401 (kept for typing/reference)
+from agents.utils import build_lookup_key, _get
 
-def calculate_tafgs(moat: int, margin_pct: float, growth_cagr: float, discount_pct: float) -> float:
-    moat_pts = (moat / 5.0) * 30.0
-    margin_score = min(max(int(margin_pct // 10), 0), 5)
-    margin_pts = (margin_score / 5.0) * 30.0
-    growth_pts = min(growth_cagr / 100.0, 1.0) * 40.0
-    
-    base_score = moat_pts + margin_pts + growth_pts
+
+def _index_by_key(records: List[dict]) -> Dict[str, dict]:
+    """
+    Keys every record by build_lookup_key(name, ticker). Safe to do a plain
+    exact-match index here because fill_missing_with_fallback already
+    normalized each record's company/ticker to the company's own canonical
+    values (including anything recovered via fuzzy match upstream).
+    """
+    index = {}
+    for r in records:
+        if not isinstance(r, dict):
+            continue
+        key = build_lookup_key(r.get("company"), r.get("ticker"))
+        if key:
+            index[key] = r
+    return index
+
+
+def calculate_tafgs(moat: int, margin_score: int, growth_cagr_pct: float, discount_pct: float) -> float:
+    """
+    Project spec Section 2: TAFGS = (Moat x Operating Margin Score) x Forecast
+    AI-Driven Growth, then risk-discounted. Raw composite for relative
+    ranking, not bounded to 0-100.
+    """
+    base_score = moat * margin_score * growth_cagr_pct
     return round(base_score * (1.0 - discount_pct), 2)
+
 
 def ranking_node(state: dict) -> dict:
     companies = state.get("companies", [])
-    moat_map = {m.get("company"): m.get("score", 3) for m in state.get("moat_scores", []) if isinstance(m, dict)}
-    margin_map = {m.get("company"): m.get("operating_margin_pct", 20.0) for m in state.get("margin_scores", []) if isinstance(m, dict)}
-    growth_map = {g.get("company"): g.get("cagr_pct", 20.0) for g in state.get("growth_forecasts", []) if isinstance(g, dict)}
-    
-    risk_discount_map = {r.get("company"): r.get("discount_pct", 0.05) for r in state.get("risk_adjustments", []) if isinstance(r, dict)}
-    risk_notes_map = {r.get("company"): r.get("risk_notes", "Standard execution risk applied") for r in state.get("risk_adjustments", []) if isinstance(r, dict)}
+
+    moat_idx = _index_by_key(state.get("moat_scores", []))
+    margin_idx = _index_by_key(state.get("margin_scores", []))
+    growth_idx = _index_by_key(state.get("growth_forecasts", []))
+    risk_idx = _index_by_key(state.get("risk_adjustments", []))
+    exposure_idx = _index_by_key(state.get("ai_revenue_exposures", []))
 
     ranked_items = []
-    for idx, c in enumerate(companies):
-        name = c.get("name") if isinstance(c, dict) else getattr(c, "name", "Unknown")
-        m_val = moat_map.get(name, 3)
-        mg_val = margin_map.get(name, 20.0)
-        g_val = growth_map.get(name, 20.0)
-        r_val = risk_discount_map.get(name, 0.05)
-        r_notes = risk_notes_map.get(name, "Standard execution risk applied")
-        
-        tafgs = calculate_tafgs(m_val, mg_val, g_val, r_val)
+    for c in companies:
+        name = _get(c, "name", "Unknown")
+        ticker = _get(c, "ticker")
+        segment = _get(c, "segment", "Compute / Servers")
+
+        key = build_lookup_key(name, ticker)
+        moat_rec = moat_idx.get(key)
+        margin_rec = margin_idx.get(key)
+        growth_rec = growth_idx.get(key)
+        risk_rec = risk_idx.get(key)
+        exposure_rec = exposure_idx.get(key)
+
+        moat_val = (moat_rec or {}).get("score", 3)
+        margin_pct = (margin_rec or {}).get("operating_margin_pct", 20.0)
+        margin_score = (margin_rec or {}).get("score", 3)
+        growth_val = (growth_rec or {}).get("cagr_pct", 20.0)
+        risk_discount = (risk_rec or {}).get("discount_pct", 0.05)
+        risk_notes = (risk_rec or {}).get("risk_notes", "Standard execution risk applied")
+
+        # Exposure now comes from the dedicated agent. Fall back to the
+        # Company's own ingestion-time placeholder only if the exposure
+        # agent has no record at all for this ticker.
+        if exposure_rec:
+            exposure_pct = exposure_rec.get("exposure_pct", 50.0)
+            exposure_source = exposure_rec.get("source", "estimated")
+        else:
+            exposure_pct = _get(c, "ai_revenue_exposure_pct", 50.0)
+            exposure_source = "placeholder"
+
+        unmatched = any([
+            moat_rec is None or moat_rec.get("unmatched", False),
+            margin_rec is None or margin_rec.get("unmatched", False),
+            growth_rec is None or growth_rec.get("unmatched", False),
+            risk_rec is None or risk_rec.get("unmatched", False),
+            exposure_rec is None or exposure_rec.get("unmatched", False),
+        ])
+
+        tafgs = calculate_tafgs(moat_val, margin_score, growth_val, risk_discount)
 
         ranked_items.append({
-            "rank": idx + 1,
+            "rank": 0,  # assigned after sort
             "company": name,
-            "ticker": c.get("ticker", "N/A") if isinstance(c, dict) else "N/A",
-            "segment": c.get("segment", "Compute / Servers") if isinstance(c, dict) else "Compute / Servers",
-            "ai_revenue_exposure_pct": c.get("ai_revenue_exposure_pct", 50.0) if isinstance(c, dict) else 50.0,
-            "moat_score": m_val,
-            "operating_margin_pct": mg_val,
-            "growth_cagr_pct": g_val,
-            "risk_notes": r_notes,
-            "tafgs_score": tafgs
+            "ticker": ticker or "N/A",
+            "segment": segment,
+            "ai_revenue_exposure_pct": exposure_pct,
+            "ai_revenue_exposure_source": exposure_source,
+            "moat_score": moat_val,
+            "operating_margin_pct": margin_pct,
+            "margin_score": margin_score,
+            "growth_cagr_pct": growth_val,
+            "risk_notes": risk_notes,
+            "tafgs_score": tafgs,
+            "unmatched": unmatched,
         })
 
     ranked_items.sort(key=lambda x: x["tafgs_score"], reverse=True)
