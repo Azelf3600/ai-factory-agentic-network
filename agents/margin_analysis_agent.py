@@ -12,6 +12,14 @@ when the rule is stated plainly in the prompt.
 Fix: keep the LLM for what it's actually useful for — estimating/recalling
 the operating margin % — but always recompute the 0-5 score deterministically
 in code from that %, overriding whatever bracket the LLM assigned.
+
+SECOND FIX (this version): the margin % itself no longer has to come from
+the LLM at all. Before calling the LLM, this agent now tries
+fetch_real_operating_margin() per company against yfinance's reported
+operatingMargins. Only companies yfinance can't resolve get sent to the
+LLM, and the resulting MarginScore.source field tells you honestly which
+is which ("real" vs "estimated") — this distinction now flows all the way
+through to the master table in report_agent.py.
 """
 
 import os
@@ -23,6 +31,7 @@ from pydantic import BaseModel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from schema import DEFAULT_MODEL, MarginScore  # noqa: E402
 from agents.utils import fill_missing_with_fallback  # noqa: E402
+from data.real_margin_fetcher import fetch_real_operating_margin  # noqa: E402
 
 llm = ChatGoogleGenerativeAI(
     model=DEFAULT_MODEL,
@@ -44,6 +53,7 @@ def _bracket_margin_score(operating_margin_pct: float) -> int:
         10-20%  -> 2
         <10%    -> 1
     Never delegate this classification to the LLM — see module docstring.
+    Applied identically whether the margin % came from yfinance or the LLM.
     """
     if operating_margin_pct > 40:
         return 5
@@ -73,35 +83,63 @@ def margin_analysis_node(state: dict) -> dict:
         companies = [{"name": state["company_name"]}]
 
     company_dicts = [c if isinstance(c, dict) else c.model_dump() for c in companies]
-    company_lines = "\n".join(
-        f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')})" for c in company_dicts
-    )
 
-    structured_llm = llm.with_structured_output(MarginBatchOutput, method="json_schema")
-    prompt = f"""
+    # --- Step 1: try real data first, per company ---
+    real_results = []
+    needs_llm = []
+    for c in company_dicts:
+        real = fetch_real_operating_margin(c.get("ticker"))
+        if real:
+            real_results.append({
+                "company": c.get("name"),
+                "ticker": c.get("ticker"),
+                "operating_margin_pct": real["operating_margin_pct"],
+                "score": _bracket_margin_score(real["operating_margin_pct"]),
+                "source": "real",
+            })
+        else:
+            needs_llm.append(c)
+
+    print(f"[Margin Analysis] {len(real_results)}/{len(company_dicts)} companies "
+          f"resolved via yfinance (real). {len(needs_llm)} sent to LLM.")
+
+    # --- Step 2: LLM only for whatever yfinance couldn't resolve ---
+    llm_results = []
+    if needs_llm:
+        company_lines = "\n".join(
+            f"- {c.get('name')} (ticker: {c.get('ticker', 'unknown')})" for c in needs_llm
+        )
+
+        structured_llm = llm.with_structured_output(MarginBatchOutput, method="json_schema")
+        prompt = f"""
 Provide the operating margin % for each company below. Give your best
 estimate of the actual reported operating margin. Return each company's
 exact ticker symbol as given (do not invent or omit it). Mark source as
-"real" only if you are confident in the actual reported operating margin;
-otherwise mark it "estimated". You may also provide a score field, but it
-will be recalculated deterministically from operating_margin_pct
-afterward, so focus your effort on getting the margin % itself right.
+"estimated" for all of these — real filed data was not available for these
+specific companies, so treat every figure here as your best estimate, not
+a confirmed fact. You may also provide a score field, but it will be
+recalculated deterministically from operating_margin_pct afterward, so
+focus your effort on getting the margin % itself right.
 
 Companies:
 {company_lines}
 """
+        try:
+            result: MarginBatchOutput = structured_llm.invoke(prompt)
+            llm_results = [m.model_dump() for m in result.analysis]
+        except Exception as e:
+            print(f"[Margin Analysis Error]: {e}")
+            llm_results = []
 
-    try:
-        result: MarginBatchOutput = structured_llm.invoke(prompt)
-        results = [m.model_dump() for m in result.analysis]
-    except Exception as e:
-        print(f"[Margin Analysis Error]: {e}")
-        results = []
+        # Always override the LLM's own bracket classification with a
+        # deterministic recomputation from the margin % it reported, and
+        # force source to "estimated" regardless of what the LLM returned —
+        # only fetch_real_operating_margin's path is allowed to set "real".
+        for r in llm_results:
+            r["score"] = _bracket_margin_score(r.get("operating_margin_pct", 20.0))
+            r["source"] = "estimated"
 
-    # Always override the LLM's own bracket classification with a
-    # deterministic recomputation from the margin % it reported.
-    for r in results:
-        r["score"] = _bracket_margin_score(r.get("operating_margin_pct", 20.0))
+    all_results = real_results + llm_results
 
-    results = fill_missing_with_fallback(company_dicts, results, _fallback_margin, agent_label="Margin Analysis Agent")
+    results = fill_missing_with_fallback(company_dicts, all_results, _fallback_margin, agent_label="Margin Analysis Agent")
     return {"margin_scores": results}

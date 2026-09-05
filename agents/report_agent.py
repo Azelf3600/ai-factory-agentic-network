@@ -45,6 +45,10 @@ def _build_master_table(rankings: List[dict]) -> str:
     any chance of the model mis-copying scores it already has as structured
     data (this is what caused the wrong margin brackets to show up in the
     table even after the underlying score was briefly fixed elsewhere).
+
+    NOTE: caller now passes only the Top 20 slice (top_n), not the full
+    rankings list, so this table stays in sync with Section 3 (Top 20
+    Company Profiles) instead of showing all 30 companies in the universe.
     """
     header = "| Rank | Company | Ticker | Segment | Moat | Margin | Op Margin % | AI Rev Exposure % | CAGR % | TAFGS |"
     sep = "|---|---|---|---|---|---|---|---|---|---|"
@@ -72,13 +76,22 @@ def _build_cross_validation_section(rankings: List[dict], cv_flags: List[dict]) 
     Renders raw cross-validation output deterministically (like the master
     table) rather than through the LLM, for the same reason: no risk of the
     model mis-transcribing a rule name or detail it already has as data.
+
+    NOTE: caller now passes only the Top 20 slice (top_n), so this section
+    only shows flags for companies actually displayed in the report above.
     """
     if not cv_flags:
         return "No cross-validation flags were raised for this run."
 
+    displayed_companies = {r["company"] for r in rankings}
+    relevant_flags = [f for f in cv_flags if f.get("company") in displayed_companies]
+
+    if not relevant_flags:
+        return "No cross-validation flags were raised among the Top 20 companies shown above."
+
     lines = []
     for r in rankings:
-        company_flags = [f for f in cv_flags if f.get("company") == r["company"]]
+        company_flags = [f for f in relevant_flags if f.get("company") == r["company"]]
         if not company_flags:
             continue
         lines.append(f"**{r['company']} ({r.get('ticker', 'N/A')})**")
@@ -164,7 +177,10 @@ def report_agent_node(state: PipelineState) -> dict:
     top_n = rankings[:TOP_N_PROFILES]
     cv_flags = state.get("cross_validation_flags", [])
 
-    unmatched = [r for r in rankings if r.get("unmatched")]
+    # Scoped to top_n only, per your instruction — unmatched companies
+    # ranked below #20 will no longer surface in this note even if they
+    # exist in the full 30-company universe.
+    unmatched = [r for r in top_n if r.get("unmatched")]
     unmatched_note = ""
     if unmatched:
         names = ", ".join(r["company"] for r in unmatched)
@@ -177,8 +193,11 @@ def report_agent_node(state: PipelineState) -> dict:
     spend_share_lines = "\n".join(f"- {seg}: ~{pct}%" for seg, pct in spend_share.items()) or \
         "- (segment spend share unavailable — Market Mapping agent did not run)"
 
-    master_table = _build_master_table(rankings)
-    cross_validation_section = _build_cross_validation_section(rankings, cv_flags)
+    # Both the master table and the cross-validation section now use top_n
+    # instead of the full rankings list, so every section of the report
+    # (table, profiles, flags) reflects the same 20 companies.
+    master_table = _build_master_table(top_n)
+    cross_validation_section = _build_cross_validation_section(top_n, cv_flags)
     profiles_md = _generate_profiles(top_n)
 
     report_text = f"""# Executive AI Infrastructure Report
