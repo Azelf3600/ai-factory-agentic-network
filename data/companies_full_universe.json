@@ -1617,21 +1617,21 @@
       "ticker": "SYSR.ST",
       "segment": "Cooling",
       "is_public": true,
-      "description": "Ventilation systems for commercial and data center use. - verify ticker before running."
+      "description": "Ventilation systems for commercial and data center use. - verify ticker/exchange before running."
     },
     {
       "name": "Shenzhen Envicool Technology",
       "ticker": "002837.SZ",
       "segment": "Cooling",
       "is_public": true,
-      "description": "Data center-specific precision cooling equipment manufacturer. - verify ticker before running."
+      "description": "Data center-specific precision cooling equipment manufacturer. - verify ticker/exchange before running."
     },
     {
       "name": "Asetek A/S",
       "ticker": "ASETEK.OL",
       "segment": "Cooling",
       "is_public": true,
-      "description": "Liquid cooling technology for servers and data centers. - verify ticker before running."
+      "description": "Liquid cooling technology for servers and data centers. - verify ticker/exchange before running."
     },
     {
       "name": "Chart Industries",
@@ -1673,7 +1673,7 @@
       "ticker": "SKA-B.ST",
       "segment": "Engineering & Construction",
       "is_public": true,
-      "description": "Large international construction and development firm. - verify ticker before running."
+      "description": "Large international construction and development firm. - verify ticker/exchange before running."
     },
     {
       "name": "Vinci SA",
@@ -1793,6 +1793,1721 @@
       "segment": "Engineering & Construction",
       "is_public": true,
       "description": "Construction management and consulting services."
+    },
+    {
+      "name": "Silicon Laboratories",
+      "ticker": "SLAB",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Mixed-signal/IoT semiconductor supplier with data infrastructure adjacencies."
+    },
+    {
+      "name": "Lattice Semiconductor",
+      "ticker": "LSCC",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Low-power FPGAs used in server and networking control planes."
+    },
+    {
+      "name": "Ambarella",
+      "ticker": "AMBA",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Edge AI vision processors, secondary data-center-adjacent exposure."
+    },
+    {
+      "name": "Impinj",
+      "ticker": "PI",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "RAIN RFID chips/IoT connectivity, minor infrastructure adjacency."
+    },
+    {
+      "name": "indie Semiconductor",
+      "ticker": "INDI",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Automotive/edge semiconductor supplier - flagged: limited direct AI Factory exposure."
+    },
+    {
+      "name": "Allegro MicroSystems",
+      "ticker": "ALGM",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Power/sensor ICs with data center power-delivery adjacency."
+    },
+    {
+      "name": "Wolfspeed",
+      "ticker": "WOLF",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Silicon carbide power semiconductors relevant to high-efficiency server/data-center power delivery."
+    },
+    {
+      "name": "Navitas Semiconductor",
+      "ticker": "NVTS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "GaN power semiconductors targeting AI server power supplies."
+    },
+    {
+      "name": "Cirrus Logic",
+      "ticker": "CRUS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Mixed-signal chips, mostly mobile-audio focused - flagged: limited AI Factory exposure."
+    },
+    {
+      "name": "Azenta Inc",
+      "ticker": "AZTA",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor automation and life-sciences equipment - flagged: mixed exposure."
+    },
+    {
+      "name": "Ichor Systems",
+      "ticker": "ICHR",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Gas/fluid delivery subsystems for semiconductor fabrication equipment."
+    },
+    {
+      "name": "Nova Ltd",
+      "ticker": "NVMI",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Metrology equipment for advanced chip fabrication (Israel)."
+    },
+    {
+      "name": "Camtek Ltd",
+      "ticker": "CAMT",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Inspection equipment for advanced packaging, relevant to AI chip yield (Israel)."
+    },
+    {
+      "name": "Veeco Instruments",
+      "ticker": "VECO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Deposition/process equipment for semiconductor and compound-semi fabrication."
+    },
+    {
+      "name": "CEVA Inc",
+      "ticker": "CEVA",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "DSP/AI processor IP licensing for embedded and edge silicon."
+    },
+    {
+      "name": "Alphawave IP Group",
+      "ticker": "AWE.L",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "High-speed connectivity IP/chiplets for AI compute interconnect - verify ticker/exchange before running."
+    },
+    {
+      "name": "Nanya Technology",
+      "ticker": "2408.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "DRAM memory manufacturer (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Winbond Electronics",
+      "ticker": "2344.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Memory chip manufacturer (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Powerchip Semiconductor Manufacturing",
+      "ticker": "6770.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Memory/foundry manufacturer (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Vanguard International Semiconductor",
+      "ticker": "5347.TWO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Specialty foundry manufacturer (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Himax Technologies",
+      "ticker": "HIMX",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Display driver ICs with some edge-AI chip exposure - flagged: limited direct AI Factory exposure."
+    },
+    {
+      "name": "Novatek Microelectronics",
+      "ticker": "3034.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Display/driver IC supplier (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Realtek Semiconductor",
+      "ticker": "2379.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Networking/connectivity chipmaker (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "MediaTek",
+      "ticker": "2454.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Fabless chip designer expanding into edge AI/ASIC silicon (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Andes Technology",
+      "ticker": "6533.TWO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "RISC-V CPU IP licensing (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "GigaDevice Semiconductor",
+      "ticker": "603986.SS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Memory chip manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Cambricon Technologies",
+      "ticker": "688256.SS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "China-based AI accelerator chip designer - verify ticker/exchange before running."
+    },
+    {
+      "name": "Hua Hong Semiconductor",
+      "ticker": "1347.HK",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Foundry manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Semiconductor Manufacturing International Corp",
+      "ticker": "0981.HK",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Leading Chinese foundry, domestic AI chip supply chain relevance - verify ticker/exchange before running."
+    },
+    {
+      "name": "Will Semiconductor",
+      "ticker": "603501.SS",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Image sensor/analog chip designer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Silergy Corp",
+      "ticker": "6415.TWO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Power management ICs (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Global Unichip Corp",
+      "ticker": "3443.TWO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "TSMC-affiliated ASIC design house, direct custom AI silicon design services (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Alchip Technologies",
+      "ticker": "3661.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "ASIC design services for custom AI accelerators (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "King Yuan Electronics",
+      "ticker": "2449.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "OSAT packaging/test provider (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Powertech Technology",
+      "ticker": "6239.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "OSAT memory packaging provider (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Chipbond Technology",
+      "ticker": "6147.TWO",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Bumping/packaging services for driver ICs (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "GlobalWafers Co",
+      "ticker": "6488.TW",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Silicon wafer supplier to the chip fabrication supply chain (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Siltronic AG",
+      "ticker": "WAF.DE",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Silicon wafer manufacturer (Germany) - verify ticker/exchange before running."
+    },
+    {
+      "name": "SUMCO Corporation",
+      "ticker": "3436.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Silicon wafer manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Shin-Etsu Chemical",
+      "ticker": "4063.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Silicon wafers and semiconductor materials supplier (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "JSR Corporation",
+      "ticker": "4185.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Photoresist and semiconductor materials supplier (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Resonac Holdings",
+      "ticker": "4004.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor materials supplier, including advanced packaging materials (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Kokusai Electric",
+      "ticker": "6525.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Semiconductor deposition equipment supplier (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Screen Holdings",
+      "ticker": "7735.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Wafer cleaning/coating equipment supplier (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Nikon Corporation",
+      "ticker": "7731.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Lithography equipment supplier, secondary to ASML in leading-edge (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Canon Inc",
+      "ticker": "7751.T",
+      "segment": "Compute / AI Servers & GPUs",
+      "is_public": true,
+      "description": "Lithography and semiconductor equipment supplier (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Iron Mountain",
+      "ticker": "IRM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Records-management company with a growing data center/colocation segment - flagged: indirect exposure, real-estate/landlord model."
+    },
+    {
+      "name": "Nippon Telegraph and Telephone (NTT)",
+      "ticker": "9432.T",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Japanese telecom/cloud operator with global data center investments - verify ticker/exchange before running."
+    },
+    {
+      "name": "KDDI Corporation",
+      "ticker": "9433.T",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Japanese telecom/cloud operator - verify ticker/exchange before running."
+    },
+    {
+      "name": "SK Telecom",
+      "ticker": "SKM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Korean telecom operator investing in AI cloud infrastructure."
+    },
+    {
+      "name": "Naver Corporation",
+      "ticker": "035420.KS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Korean internet/cloud/AI platform operator - verify ticker before running."
+    },
+    {
+      "name": "Kakao Corp",
+      "ticker": "035720.KS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Korean internet platform, secondary AI/cloud exposure - verify ticker before running."
+    },
+    {
+      "name": "Sea Limited",
+      "ticker": "SE",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Southeast Asian internet/e-commerce platform with growing cloud/AI usage - flagged: indirect exposure."
+    },
+    {
+      "name": "MongoDB",
+      "ticker": "MDB",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud database platform, growing AI application workload usage."
+    },
+    {
+      "name": "Datadog",
+      "ticker": "DDOG",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud observability platform, monitors hyperscale AI infrastructure."
+    },
+    {
+      "name": "Elastic NV",
+      "ticker": "ESTC",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Search/AI data platform running on hyperscale cloud infrastructure."
+    },
+    {
+      "name": "Confluent Inc",
+      "ticker": "CFLT",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Data streaming platform supporting real-time AI pipelines."
+    },
+    {
+      "name": "Box Inc",
+      "ticker": "BOX",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud content platform adding AI-driven features - flagged: indirect infrastructure exposure."
+    },
+    {
+      "name": "Dropbox Inc",
+      "ticker": "DBX",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud storage platform - flagged: indirect infrastructure exposure."
+    },
+    {
+      "name": "Zscaler Inc",
+      "ticker": "ZS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud security platform, adjacent to AI infrastructure buildout - flagged: indirect exposure."
+    },
+    {
+      "name": "Twilio Inc",
+      "ticker": "TWLO",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud communications platform, heavy hyperscale compute consumer - flagged: indirect exposure."
+    },
+    {
+      "name": "Workday Inc",
+      "ticker": "WDAY",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Enterprise cloud software adding AI features - flagged: indirect exposure."
+    },
+    {
+      "name": "Adobe Inc",
+      "ticker": "ADBE",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Creative/cloud software integrating generative AI (Firefly) - flagged: indirect infrastructure exposure."
+    },
+    {
+      "name": "UiPath Inc",
+      "ticker": "PATH",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AI-driven automation platform running on hyperscale cloud."
+    },
+    {
+      "name": "SentinelOne Inc",
+      "ticker": "S",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "AI-driven cybersecurity platform - flagged: indirect infrastructure exposure."
+    },
+    {
+      "name": "Zoom Communications",
+      "ticker": "ZM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud video platform adding AI companion features - flagged: indirect exposure."
+    },
+    {
+      "name": "Five9 Inc",
+      "ticker": "FIVN",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Cloud contact-center platform with AI features - flagged: indirect exposure."
+    },
+    {
+      "name": "Tata Consultancy Services",
+      "ticker": "TCS.NS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "India-based IT/cloud services firm - verify ticker before running."
+    },
+    {
+      "name": "Wipro Limited",
+      "ticker": "WIT",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "India-based IT services firm with cloud/AI consulting practice."
+    },
+    {
+      "name": "HCL Technologies",
+      "ticker": "HCLTECH.NS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "India-based IT services firm - verify ticker before running."
+    },
+    {
+      "name": "Tech Mahindra",
+      "ticker": "TECHM.NS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "India-based IT/telecom services firm - verify ticker before running."
+    },
+    {
+      "name": "NEC Corporation",
+      "ticker": "6701.T",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Japanese IT/cloud infrastructure provider - verify ticker before running."
+    },
+    {
+      "name": "Fujitsu Limited",
+      "ticker": "6702.T",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Japanese IT/cloud infrastructure provider - verify ticker before running."
+    },
+    {
+      "name": "LTIMindtree",
+      "ticker": "LTIM.NS",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "India-based IT services firm - verify ticker before running."
+    },
+    {
+      "name": "Genpact Limited",
+      "ticker": "G",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Business process/AI services firm."
+    },
+    {
+      "name": "EPAM Systems",
+      "ticker": "EPAM",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Digital engineering/cloud consulting services firm."
+    },
+    {
+      "name": "Globant SA",
+      "ticker": "GLOB",
+      "segment": "Compute Platforms & Hyperscalers",
+      "is_public": true,
+      "description": "Digital/AI transformation consulting services firm."
+    },
+    {
+      "name": "Adtran Holdings",
+      "ticker": "ADTN",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Broadband/optical access networking equipment."
+    },
+    {
+      "name": "Airspan Networks",
+      "ticker": "MIMO",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Wireless networking equipment - flagged: smaller-cap, financially volatile."
+    },
+    {
+      "name": "Ribbon Communications",
+      "ticker": "RBBN",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Networking/telecom infrastructure software and hardware."
+    },
+    {
+      "name": "InterDigital Inc",
+      "ticker": "IDCC",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Wireless/connectivity IP licensing."
+    },
+    {
+      "name": "Digi International",
+      "ticker": "DGII",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "IoT/networking hardware supplier."
+    },
+    {
+      "name": "Aviat Networks",
+      "ticker": "AVNW",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Microwave backhaul networking equipment."
+    },
+    {
+      "name": "Comtech Telecommunications",
+      "ticker": "CMTL",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite/networking communications equipment."
+    },
+    {
+      "name": "ViaSat Inc",
+      "ticker": "VSAT",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite communications and networking systems."
+    },
+    {
+      "name": "Iridium Communications",
+      "ticker": "IRDM",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite networking constellation operator."
+    },
+    {
+      "name": "Gilat Satellite Networks",
+      "ticker": "GILT",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite networking ground systems (Israel)."
+    },
+    {
+      "name": "EchoStar Corporation",
+      "ticker": "SATS",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite communications and networking infrastructure."
+    },
+    {
+      "name": "KVH Industries",
+      "ticker": "KVHI",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Satellite communications networking equipment."
+    },
+    {
+      "name": "ZTE Corporation",
+      "ticker": "000063.SZ",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Networking/telecom equipment supplier (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Fiberhome Telecommunication Technologies",
+      "ticker": "600498.SS",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical networking equipment supplier (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Accelink Technologies",
+      "ticker": "002281.SZ",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical components manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Hengtong Optic-Electric",
+      "ticker": "600487.SS",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Fiber optic cable manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Yangtze Optical Fibre and Cable (YOFC)",
+      "ticker": "601869.SS",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Fiber optic cable manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Innolight Technology",
+      "ticker": "300308.SZ",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical transceiver manufacturer, major AI data center networking supplier (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Eoptolink Technology",
+      "ticker": "300502.SZ",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Optical transceiver manufacturer for AI data center networks (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Keysight Technologies",
+      "ticker": "KEYS",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Network/electronic test and measurement equipment used in data center validation."
+    },
+    {
+      "name": "Anritsu Corporation",
+      "ticker": "6754.T",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Test and measurement equipment for telecom/networking (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Yokogawa Electric",
+      "ticker": "6841.T",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Test and measurement/industrial control equipment (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Furukawa Electric",
+      "ticker": "5801.T",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Fiber optic cable manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sumitomo Electric Industries",
+      "ticker": "5802.T",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Cables and networking components manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Prysmian Group",
+      "ticker": "PRY.MI",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Fiber optic and power cable manufacturer (Italy) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Nexans SA",
+      "ticker": "NEX.PA",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Cable manufacturer including fiber optic products (France) - verify ticker/exchange before running."
+    },
+    {
+      "name": "NKT A/S",
+      "ticker": "NKT.CO",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Cable manufacturer (Denmark) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Telefonica SA",
+      "ticker": "TEF",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Telecom network operator - flagged: broad telecom exposure, not AI-Factory-specific."
+    },
+    {
+      "name": "Deutsche Telekom AG",
+      "ticker": "DTE.DE",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Telecom network operator, T-Systems cloud/data center arm - verify ticker/exchange before running."
+    },
+    {
+      "name": "Vodafone Group",
+      "ticker": "VOD",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Telecom network operator - flagged: broad telecom exposure, not AI-Factory-specific."
+    },
+    {
+      "name": "BT Group",
+      "ticker": "BT-A.L",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "UK telecom network operator - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Telecom Corp",
+      "ticker": "0728.HK",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Chinese telecom network operator - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Unicom",
+      "ticker": "0762.HK",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Chinese telecom network operator - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Mobile Limited",
+      "ticker": "0941.HK",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "Chinese telecom network operator - verify ticker/exchange before running."
+    },
+    {
+      "name": "Pinnacle West Capital",
+      "ticker": "PNW",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Arizona) with rising data center load - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "NiSource Inc",
+      "ticker": "NI",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Evergy Inc",
+      "ticker": "EVRG",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Alliant Energy",
+      "ticker": "LNT",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "DTE Energy",
+      "ticker": "DTE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Michigan) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Consolidated Edison",
+      "ticker": "ED",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (New York) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Eversource Energy",
+      "ticker": "ES",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Northeast US) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "CenterPoint Energy",
+      "ticker": "CNP",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Texas) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "OGE Energy Corp",
+      "ticker": "OGE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Oklahoma) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Portland General Electric",
+      "ticker": "POR",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Oregon) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "IDACORP Inc",
+      "ticker": "IDA",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility (Idaho) - flagged: utility, not equipment OEM."
+    },
+    {
+      "name": "Hawaiian Electric Industries",
+      "ticker": "HE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Regulated utility - flagged: utility, not equipment OEM; elevated financial/legal risk (wildfire litigation)."
+    },
+    {
+      "name": "Uranium Energy Corp",
+      "ticker": "UEC",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Uranium producer, supply chain beneficiary of nuclear power demand for AI data centers."
+    },
+    {
+      "name": "Denison Mines Corp",
+      "ticker": "DNN",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Uranium producer, supply chain beneficiary of nuclear power demand."
+    },
+    {
+      "name": "NexGen Energy Ltd",
+      "ticker": "NXE",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Uranium developer, supply chain beneficiary of nuclear power demand."
+    },
+    {
+      "name": "Paladin Energy Ltd",
+      "ticker": "PDN.AX",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Uranium producer (Australia) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Enel SpA",
+      "ticker": "ENEL.MI",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Large European utility/renewables operator - flagged: utility, not equipment OEM - verify ticker/exchange before running."
+    },
+    {
+      "name": "Iberdrola SA",
+      "ticker": "IBE.MC",
+      "segment": "Power - Generators & Turbines",
+      "is_public": true,
+      "description": "Renewables/utility operator (Spain) - flagged: utility, not equipment OEM - verify ticker/exchange before running."
+    },
+    {
+      "name": "Thermon Group Holdings",
+      "ticker": "THR",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Industrial process heating solutions, adjacent to data center facilities equipment."
+    },
+    {
+      "name": "Chroma ATE",
+      "ticker": "2360.TW",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Test equipment for power electronics (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Voltronic Power Technology",
+      "ticker": "6409.TWO",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "UPS manufacturer (Taiwan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "American Superconductor Corp",
+      "ticker": "AMSC",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Grid interconnection/power quality technology relevant to data center grid connections."
+    },
+    {
+      "name": "Itron Inc",
+      "ticker": "ITRI",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Smart grid metering technology."
+    },
+    {
+      "name": "Landis+Gyr Group",
+      "ticker": "LAND.SW",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Smart grid metering technology (Switzerland) - verify ticker/exchange before running."
+    },
+    {
+      "name": "SolarEdge Technologies",
+      "ticker": "SEDG",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power electronics/inverter manufacturer."
+    },
+    {
+      "name": "Enphase Energy",
+      "ticker": "ENPH",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power electronics/inverter manufacturer."
+    },
+    {
+      "name": "SMA Solar Technology",
+      "ticker": "S92.DE",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Inverter/power electronics manufacturer (Germany) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sungrow Power Supply",
+      "ticker": "300274.SZ",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power electronics/inverter manufacturer with growing data center power exposure (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "TDK Corporation",
+      "ticker": "6762.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electronic components/power supply manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Murata Manufacturing",
+      "ticker": "6981.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electronic components manufacturer, including power components (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Taiyo Yuden",
+      "ticker": "6976.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electronic/passive components manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Nidec Corporation",
+      "ticker": "6594.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Motors, including data center cooling fans and power systems (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Omron Corporation",
+      "ticker": "6645.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Industrial automation/power control systems (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Yaskawa Electric",
+      "ticker": "6506.T",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Industrial automation and motion control systems (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "CG Power and Industrial Solutions",
+      "ticker": "CGPOWER.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Siemens Limited (India)",
+      "ticker": "SIEMENS.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power/industrial equipment supplier, India-listed Siemens subsidiary - verify ticker before running."
+    },
+    {
+      "name": "Havells India",
+      "ticker": "HAVELLS.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrical equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Polycab India Limited",
+      "ticker": "POLYCAB.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Cable and wire manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "KEC International",
+      "ticker": "KEC.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power transmission EPC contractor (India) - verify ticker before running."
+    },
+    {
+      "name": "ABB India Limited",
+      "ticker": "ABB.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power/automation equipment, India-listed ABB subsidiary - verify ticker before running."
+    },
+    {
+      "name": "Thermax Limited",
+      "ticker": "THERMAX.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Industrial energy/power equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Voltamp Transformers",
+      "ticker": "VOLTAMP.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Transformer manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Transformers and Rectifiers India",
+      "ticker": "TARIL.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Transformer manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Hitachi Energy India",
+      "ticker": "POWERINDIA.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power grid equipment, India-listed Hitachi Energy subsidiary - verify ticker before running."
+    },
+    {
+      "name": "GE T&D India",
+      "ticker": "GET&D.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Power transmission and distribution equipment, India-listed GE subsidiary - verify ticker before running."
+    },
+    {
+      "name": "Kirloskar Electric Company",
+      "ticker": "KIRLOSELEC.NS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Electrical equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "EnerSys",
+      "ticker": "ENS",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Industrial batteries and backup power systems relevant to UPS/data center backup."
+    },
+    {
+      "name": "Ultralife Corporation",
+      "ticker": "ULBI",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Battery and power systems manufacturer - flagged: small-cap, limited direct AI Factory exposure."
+    },
+    {
+      "name": "Stem Inc",
+      "ticker": "STEM",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Energy storage software/hardware platform relevant to grid-connected data center power."
+    },
+    {
+      "name": "Eos Energy Enterprises",
+      "ticker": "EOSE",
+      "segment": "Power - UPS, Switchgear & PDUs",
+      "is_public": true,
+      "description": "Energy storage systems manufacturer - flagged: early-stage financial profile."
+    },
+    {
+      "name": "Fujitsu General",
+      "ticker": "5726.T",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Air conditioning manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sanden Holdings",
+      "ticker": "6444.T",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC/compressor manufacturer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Panasonic Holdings",
+      "ticker": "6752.T",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Diversified electronics conglomerate including HVAC systems (Japan) - flagged: broad conglomerate exposure - verify ticker/exchange before running."
+    },
+    {
+      "name": "Haier Smart Home",
+      "ticker": "600690.SS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Appliance/HVAC manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Zhejiang Dunan Artificial Environment",
+      "ticker": "002011.SZ",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC components manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "A.O. Smith Corp",
+      "ticker": "AOS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Water heating/treatment technology, adjacent to cooling-loop water systems."
+    },
+    {
+      "name": "Franklin Electric Co",
+      "ticker": "FELE",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Pump manufacturer relevant to liquid cooling loops."
+    },
+    {
+      "name": "Flowserve Corporation",
+      "ticker": "FLS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Industrial pumps and flow control used in cooling loops."
+    },
+    {
+      "name": "Pentair plc",
+      "ticker": "PNR",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Water/fluid systems technology relevant to data center cooling loops."
+    },
+    {
+      "name": "IDEX Corporation",
+      "ticker": "IEX",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Fluid handling and metering technology, cooling-loop adjacent."
+    },
+    {
+      "name": "Mueller Water Products",
+      "ticker": "MWA",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Water infrastructure products - flagged: primarily municipal water, limited direct exposure."
+    },
+    {
+      "name": "Gorman-Rupp Company",
+      "ticker": "GRC",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Pump manufacturer relevant to cooling-loop circulation."
+    },
+    {
+      "name": "Weir Group",
+      "ticker": "WEIR.L",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Pumps/flow control equipment manufacturer (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sulzer Ltd",
+      "ticker": "SUN.SW",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Pumps and fluid technology manufacturer (Switzerland) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Dover Corporation",
+      "ticker": "DOV",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Diversified industrial manufacturer including thermal/pump equipment - flagged: broad conglomerate exposure."
+    },
+    {
+      "name": "Mueller Industries",
+      "ticker": "MLI",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Piping and tubing products used in cooling systems."
+    },
+    {
+      "name": "Hisense Kelon Electrical Holdings",
+      "ticker": "000921.SZ",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC/refrigeration equipment manufacturer (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Spirax-Sarco Engineering",
+      "ticker": "SPX.L",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Thermal/steam systems manufacturer (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Halma plc",
+      "ticker": "HLMA.L",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Safety/environmental technology group, includes cooling monitoring products - verify ticker/exchange before running."
+    },
+    {
+      "name": "Rotork plc",
+      "ticker": "ROR.L",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Flow control actuators used in industrial and cooling systems (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "IMI plc",
+      "ticker": "IMI.L",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Fluid/motion control technology (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Alfa Laval AB",
+      "ticker": "ALFA.ST",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Heat exchanger manufacturer, key component supplier for liquid cooling systems (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Kirloskar Pneumatic",
+      "ticker": "KIRLPNU.NS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Compressor manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Voltas Limited",
+      "ticker": "VOLTAS.NS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC/cooling equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Blue Star Limited",
+      "ticker": "BLUESTARCO.NS",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC/cooling equipment manufacturer (India) - verify ticker before running."
+    },
+    {
+      "name": "Nibe Industrier AB",
+      "ticker": "NIBEB.ST",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Heating/cooling systems manufacturer (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Crane Company",
+      "ticker": "CR",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Industrial fluid handling equipment manufacturer."
+    },
+    {
+      "name": "Roper Technologies",
+      "ticker": "ROP",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Diversified industrial technology conglomerate including flow/fluid measurement - flagged: broad conglomerate exposure."
+    },
+    {
+      "name": "GEA Group AG",
+      "ticker": "G1A.DE",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Industrial process and refrigeration equipment manufacturer (Germany) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Beijer Ref AB",
+      "ticker": "BEIJB.ST",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Refrigeration and HVAC distribution group (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Watsco Inc",
+      "ticker": "WSO",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Largest HVAC/cooling equipment distributor in North America."
+    },
+    {
+      "name": "Ferguson plc",
+      "ticker": "FERG",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "HVAC/plumbing products distributor (US/UK-listed)."
+    },
+    {
+      "name": "Stantec Inc",
+      "ticker": "STN",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering/design services firm (Canada) with data center project experience."
+    },
+    {
+      "name": "Arcadis NV",
+      "ticker": "ARCAD.AS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering/design consultancy (Netherlands) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sweco AB",
+      "ticker": "SWECB.ST",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering consultancy (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Multiconsult ASA",
+      "ticker": "MULTI.OL",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering consultancy (Norway) - verify ticker/exchange before running."
+    },
+    {
+      "name": "NCC AB",
+      "ticker": "NCC-B.ST",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and infrastructure firm (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Peab AB",
+      "ticker": "PEAB-B.ST",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and infrastructure firm (Sweden) - verify ticker/exchange before running."
+    },
+    {
+      "name": "YIT Corporation",
+      "ticker": "YIT.HE",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Finland) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Bouygues SA",
+      "ticker": "EN.PA",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Diversified construction/infrastructure conglomerate (France) - flagged: broad conglomerate exposure - verify ticker/exchange before running."
+    },
+    {
+      "name": "Eiffage SA",
+      "ticker": "FGR.PA",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and infrastructure concessions firm (France) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Spie SA",
+      "ticker": "SPIE.PA",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Electrical/mechanical engineering services firm (France) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Bilfinger SE",
+      "ticker": "GBF.DE",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Industrial engineering services firm (Germany) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Hochtief AG",
+      "ticker": "HOT.DE",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Germany), parent of Turner Construction - verify ticker/exchange before running."
+    },
+    {
+      "name": "Strabag SE",
+      "ticker": "STR.VI",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Austria) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Ferrovial SE",
+      "ticker": "FER.MC",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure/construction firm (Spain) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Sacyr SA",
+      "ticker": "SCYR.MC",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and infrastructure concessions firm (Spain) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Fomento de Construcciones y Contratas (FCC)",
+      "ticker": "FCC.MC",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and infrastructure firm (Spain) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Webuild SpA",
+      "ticker": "WBD.MI",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction/infrastructure firm (Italy) - verify ticker/exchange before running."
+    },
+    {
+      "name": "China State Construction Engineering Corp",
+      "ticker": "601668.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Large state-owned construction contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Communications Construction Company",
+      "ticker": "601800.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Large state-owned infrastructure contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Railway Group",
+      "ticker": "601390.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Large state-owned construction/rail contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Railway Construction Corp",
+      "ticker": "601186.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Large state-owned construction contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Power Construction Corporation of China",
+      "ticker": "601669.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Power-sector EPC contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "China Energy Engineering Corp",
+      "ticker": "601868.SS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Power-sector EPC contractor (China) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Obayashi Corporation",
+      "ticker": "1802.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Kajima Corporation",
+      "ticker": "1812.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Shimizu Corporation",
+      "ticker": "1803.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Taisei Corporation",
+      "ticker": "1801.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Daiwa House Industry",
+      "ticker": "1925.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction/real estate developer (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "JGC Holdings Corporation",
+      "ticker": "1963.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "EPC/engineering firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Chiyoda Corporation",
+      "ticker": "6366.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "EPC/engineering firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Toyo Engineering Corporation",
+      "ticker": "6330.T",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "EPC/engineering firm (Japan) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Hyundai Engineering & Construction",
+      "ticker": "000720.KS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Korea) - verify ticker before running."
+    },
+    {
+      "name": "Samsung C&T Corporation",
+      "ticker": "028260.KS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction/engineering firm (Korea) - verify ticker before running."
+    },
+    {
+      "name": "GS Engineering & Construction",
+      "ticker": "006360.KS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Korea) - verify ticker before running."
+    },
+    {
+      "name": "Daewoo Engineering & Construction",
+      "ticker": "047040.KS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (Korea) - verify ticker before running."
+    },
+    {
+      "name": "IRB Infrastructure Developers",
+      "ticker": "IRB.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure developer (India) - verify ticker before running."
+    },
+    {
+      "name": "GMR Airports Infrastructure",
+      "ticker": "GMRINFRA.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure developer (India) - verify ticker before running."
+    },
+    {
+      "name": "NCC Limited (India)",
+      "ticker": "NCC.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (India, distinct from Sweden-listed NCC AB) - verify ticker before running."
+    },
+    {
+      "name": "Sadbhav Engineering",
+      "ticker": "SADBHIN.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure construction firm (India) - verify ticker before running."
+    },
+    {
+      "name": "Ashoka Buildcon",
+      "ticker": "ASHOKA.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure construction firm (India) - verify ticker before running."
+    },
+    {
+      "name": "KNR Constructions",
+      "ticker": "KNRCON.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure construction firm (India) - verify ticker before running."
+    },
+    {
+      "name": "PNC Infratech",
+      "ticker": "PNCINFRA.NS",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure construction firm (India) - verify ticker before running."
+    },
+    {
+      "name": "Kier Group plc",
+      "ticker": "KIE.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Costain Group plc",
+      "ticker": "COST.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction/infrastructure firm (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Galliford Try Holdings",
+      "ticker": "GFRD.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Morgan Sindall Group",
+      "ticker": "MGNS.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction firm (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Keller Group plc",
+      "ticker": "KLR.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Ground engineering/foundations specialist, relevant to data center site prep (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "Renew Holdings plc",
+      "ticker": "RNWH.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Infrastructure engineering services firm (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "John Wood Group plc",
+      "ticker": "WG.L",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Engineering/EPC firm, primarily energy sector (UK) - verify ticker/exchange before running."
+    },
+    {
+      "name": "LU-VE Group SpA",
+      "ticker": "LOVE.MI",
+      "segment": "Cooling",
+      "is_public": true,
+      "description": "Heat exchanger manufacturer (Italy), key component supplier for liquid/air cooling systems - verify ticker/exchange before running."
+    },
+    {
+      "name": "u-blox Holding AG",
+      "ticker": "UBXN.SW",
+      "segment": "Networking",
+      "is_public": true,
+      "description": "IoT/wireless connectivity module manufacturer (Switzerland) - verify ticker/exchange before running."
+    },
+    {
+      "name": "AF Gruppen ASA",
+      "ticker": "AFG.OL",
+      "segment": "Engineering & Construction",
+      "is_public": true,
+      "description": "Construction and civil engineering firm (Norway) - verify ticker/exchange before running."
     }
   ]
 }
