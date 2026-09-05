@@ -15,6 +15,7 @@ from agents.margin_analysis_agent import margin_analysis_node
 from agents.growth_forecast_agent import growth_forecast_node
 from agents.risk_adjustment_agent import risk_adjustment_node
 from agents.ai_revenue_exposure_agent import ai_revenue_exposure_node
+from agents.cross_validation_agent import cross_validation_node
 from agents.ranking_agent import ranking_node
 from agents.report_agent import report_agent_node
 
@@ -30,6 +31,7 @@ def build_pipeline_graph():
     workflow.add_node("growth_forecast", growth_forecast_node)
     workflow.add_node("risk_adjustment", risk_adjustment_node)
     workflow.add_node("ai_revenue_exposure", ai_revenue_exposure_node)
+    workflow.add_node("cross_validation", cross_validation_node)
     workflow.add_node("ranking", ranking_node)
     workflow.add_node("report", report_agent_node)
 
@@ -42,12 +44,16 @@ def build_pipeline_graph():
     workflow.add_edge("company_ingestion", "risk_adjustment")
     workflow.add_edge("company_ingestion", "ai_revenue_exposure")
 
-    workflow.add_edge("moat_analysis", "ranking")
-    workflow.add_edge("margin_analysis", "ranking")
-    workflow.add_edge("growth_forecast", "ranking")
-    workflow.add_edge("risk_adjustment", "ranking")
-    workflow.add_edge("ai_revenue_exposure", "ranking")
+    # Cross-validation runs only after ALL five scoring agents have written
+    # their results — LangGraph waits for every incoming edge before firing
+    # a node, so this join is automatic as long as all five point to it.
+    workflow.add_edge("moat_analysis", "cross_validation")
+    workflow.add_edge("margin_analysis", "cross_validation")
+    workflow.add_edge("growth_forecast", "cross_validation")
+    workflow.add_edge("risk_adjustment", "cross_validation")
+    workflow.add_edge("ai_revenue_exposure", "cross_validation")
 
+    workflow.add_edge("cross_validation", "ranking")
     workflow.add_edge("ranking", "report")
     workflow.add_edge("report", END)
 
@@ -66,6 +72,7 @@ if __name__ == "__main__":
         "growth_forecasts": [],
         "risk_adjustments": [],
         "ai_revenue_exposures": [],
+        "cross_validation_flags": [],
         "rankings": [],
         "final_report": "",
     }
@@ -82,3 +89,9 @@ if __name__ == "__main__":
     if unmatched:
         print(f"\n[WARNING] {len(unmatched)} companies had incomplete agent data: "
               f"{', '.join(r['company'] for r in unmatched)}")
+
+    cv_flags = final_output.get("cross_validation_flags", [])
+    if cv_flags:
+        print(f"\n[CROSS-VALIDATION] {len(cv_flags)} flag(s) raised:")
+        for f in cv_flags:
+            print(f"  - {f['company']} ({f['ticker']}) [{f['rule']}]: {f['detail']}")

@@ -56,8 +56,12 @@ DEFAULT_SEGMENTS = [
     "Engineering & Construction",
 ]
 
-# Maps the Day 2 dataset's 7 segments down to the pipeline's 5.
-# See module docstring — this fold is a scope decision, flag it to the team.
+# CONFIRMED (per activity Section 3.1 — 5 segments only): the Day 2 dataset's
+# "Compute Platforms & Hyperscalers" segment (Microsoft/Amazon/TSMC/Broadcom/
+# Meta) folds into "Compute / Servers" for this pipeline. Hyperscalers are
+# grouped with compute suppliers here even though they play a buyer/operator
+# role rather than a component-supplier role — flagged in the report so
+# readers don't read the segment column as apples-to-apples within that bucket.
 SEGMENT_FOLD_MAP = {
     "Compute / AI Servers & GPUs": "Compute / Servers",
     "Compute Platforms & Hyperscalers": "Compute / Servers",

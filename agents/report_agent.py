@@ -51,6 +51,7 @@ def _build_master_table(rankings: List[dict]) -> str:
     rows = [header, sep]
     for r in rankings:
         flag = " *" if r.get("unmatched") else ""
+        flag += " †" if r.get("cross_validation_flags") else ""
         exposure = r.get("ai_revenue_exposure_pct", 50.0)
         exposure_label = f"{exposure:.0f}%" if r.get("ai_revenue_exposure_source") != "placeholder" else "n/a*"
         rows.append(
@@ -60,8 +61,30 @@ def _build_master_table(rankings: List[dict]) -> str:
         )
     table = "\n".join(rows)
     footnote = ("\n\n\\* Flagged rows had at least one agent fall back to a default "
-                "(unmatched result), or AI revenue exposure has not yet been reliably estimated.")
+                "(unmatched result), or AI revenue exposure has not yet been reliably estimated."
+                "\n\n† Flagged rows triggered a cross-validation rule — see Section 4 below "
+                "before treating these scores as final.")
     return table + footnote
+
+
+def _build_cross_validation_section(rankings: List[dict], cv_flags: List[dict]) -> str:
+    """
+    Renders raw cross-validation output deterministically (like the master
+    table) rather than through the LLM, for the same reason: no risk of the
+    model mis-transcribing a rule name or detail it already has as data.
+    """
+    if not cv_flags:
+        return "No cross-validation flags were raised for this run."
+
+    lines = []
+    for r in rankings:
+        company_flags = [f for f in cv_flags if f.get("company") == r["company"]]
+        if not company_flags:
+            continue
+        lines.append(f"**{r['company']} ({r.get('ticker', 'N/A')})**")
+        for f in company_flags:
+            lines.append(f"- `{f['rule']}`: {f['detail']}")
+    return "\n".join(lines)
 
 
 def _generate_profiles(rankings_top_n: List[dict]) -> str:
@@ -92,6 +115,10 @@ For each company provide:
 If ai_revenue_exposure_source is "placeholder" for a company, do not state
 an exposure % as fact anywhere in that company's profile — say it hasn't
 been reliably estimated yet.
+
+If a company has a non-empty cross_validation_flags list, mention in
+key_risks that its scores triggered an internal-consistency flag and
+should be treated as lower-confidence pending review.
 """
         try:
             result: ProfileBatchOutput = structured_llm.invoke(prompt)
@@ -135,6 +162,7 @@ been reliably estimated yet.
 def report_agent_node(state: PipelineState) -> dict:
     rankings = state.get("rankings", [])
     top_n = rankings[:TOP_N_PROFILES]
+    cv_flags = state.get("cross_validation_flags", [])
 
     unmatched = [r for r in rankings if r.get("unmatched")]
     unmatched_note = ""
@@ -150,6 +178,7 @@ def report_agent_node(state: PipelineState) -> dict:
         "- (segment spend share unavailable — Market Mapping agent did not run)"
 
     master_table = _build_master_table(rankings)
+    cross_validation_section = _build_cross_validation_section(rankings, cv_flags)
     profiles_md = _generate_profiles(top_n)
 
     report_text = f"""# Executive AI Infrastructure Report
@@ -166,5 +195,9 @@ Spend-share breakdown, derived from AI Factory equipment cost reference data:
 ## 3. Top {len(top_n)} Company Profiles
 
 {profiles_md}
+
+## 4. Cross-Validation Flags
+
+{cross_validation_section}
 """
     return {"final_report": report_text}

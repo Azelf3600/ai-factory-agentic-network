@@ -26,14 +26,24 @@ def _index_by_key(records: List[dict]) -> Dict[str, dict]:
     return index
 
 
-def calculate_tafgs(moat: int, margin_score: int, growth_cagr_pct: float, discount_pct: float) -> float:
-    """
-    Project spec Section 2: TAFGS = (Moat x Operating Margin Score) x Forecast
-    AI-Driven Growth, then risk-discounted. Raw composite for relative
-    ranking, not bounded to 0-100.
-    """
-    base_score = moat * margin_score * growth_cagr_pct
-    return round(base_score * (1.0 - discount_pct), 2)
+def _index_flags_by_key(flags: List[dict]) -> Dict[str, List[dict]]:
+    """Cross-validation flags are 0-to-many per company, so this indexes
+    to a list per key rather than a single record like the other indexes."""
+    index: Dict[str, List[dict]] = {}
+    for f in flags:
+        if not isinstance(f, dict):
+            continue
+        key = build_lookup_key(f.get("company"), f.get("ticker"))
+        if key:
+            index.setdefault(key, []).append(f)
+    return index
+
+
+def calculate_tafgs(moat: int, margin_score: int, growth_cagr_pct: float) -> float:
+    """Project spec Section 2, literal: TAFGS = (Moat x Margin Score) x Growth CAGR.
+    Risk discount is NOT part of this formula — it's reported separately via
+    risk_notes/discount_pct so the ranking number matches the spec exactly."""
+    return round(moat * margin_score * growth_cagr_pct, 2)
 
 
 def ranking_node(state: dict) -> dict:
@@ -44,6 +54,7 @@ def ranking_node(state: dict) -> dict:
     growth_idx = _index_by_key(state.get("growth_forecasts", []))
     risk_idx = _index_by_key(state.get("risk_adjustments", []))
     exposure_idx = _index_by_key(state.get("ai_revenue_exposures", []))
+    flags_idx = _index_flags_by_key(state.get("cross_validation_flags", []))
 
     ranked_items = []
     for c in companies:
@@ -57,6 +68,7 @@ def ranking_node(state: dict) -> dict:
         growth_rec = growth_idx.get(key)
         risk_rec = risk_idx.get(key)
         exposure_rec = exposure_idx.get(key)
+        company_flags = flags_idx.get(key, [])
 
         moat_val = (moat_rec or {}).get("score", 3)
         margin_pct = (margin_rec or {}).get("operating_margin_pct", 20.0)
@@ -83,7 +95,7 @@ def ranking_node(state: dict) -> dict:
             exposure_rec is None or exposure_rec.get("unmatched", False),
         ])
 
-        tafgs = calculate_tafgs(moat_val, margin_score, growth_val, risk_discount)
+        tafgs = calculate_tafgs(moat_val, margin_score, growth_val)
 
         ranked_items.append({
             "rank": 0,  # assigned after sort
@@ -99,6 +111,7 @@ def ranking_node(state: dict) -> dict:
             "risk_notes": risk_notes,
             "tafgs_score": tafgs,
             "unmatched": unmatched,
+            "cross_validation_flags": [f["rule"] for f in company_flags],
         })
 
     ranked_items.sort(key=lambda x: x["tafgs_score"], reverse=True)

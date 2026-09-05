@@ -84,6 +84,22 @@ class AIRevenueExposure(BaseModel):
     source: Literal["real", "estimated"] = "estimated"
 
 
+class CrossValidationFlag(BaseModel):
+    """
+    Output of the Cross-Validation Agent, zero or more per company.
+    Rules-based internal-consistency checks across Moat/Margin/Growth/Risk/
+    Exposure outputs — NOT a second LLM opinion re-judging another agent's
+    score. Purpose is to catch outputs that are individually plausible but
+    jointly inconsistent (e.g. Moat=5 with Growth=3%), per Section 4's
+    "agents cross-validate assumptions to prevent single-factor bias."
+    """
+    company: str
+    ticker: Optional[str] = None
+    rule: str
+    severity: Literal["info", "warning"] = "warning"
+    detail: str
+
+
 class RankedCompany(BaseModel):
     """One row of the final output table. Built by the Ranking Agent."""
     rank: int
@@ -99,6 +115,7 @@ class RankedCompany(BaseModel):
     risk_notes: Optional[str] = None
     tafgs_score: float  # Total AI Factory Growth Score
     unmatched: bool = False  # True if one or more agents fell back to defaults for this company
+    cross_validation_flags: List[str] = Field(default_factory=list)  # rule names flagged, if any
 
 
 class PipelineState(TypedDict, total=False):
@@ -122,5 +139,6 @@ class PipelineState(TypedDict, total=False):
     growth_forecasts: Annotated[List[Union[GrowthForecast, dict, Any]], operator.add]
     risk_adjustments: Annotated[List[Union[RiskAdjustment, dict, Any]], operator.add]
     ai_revenue_exposures: Annotated[List[Union[AIRevenueExposure, dict, Any]], operator.add]
+    cross_validation_flags: Annotated[List[Union[CrossValidationFlag, dict, Any]], operator.add]
     rankings: List[Union[RankedCompany, dict, Any]]
     final_report: str
