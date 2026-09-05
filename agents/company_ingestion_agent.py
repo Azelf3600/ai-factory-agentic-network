@@ -21,46 +21,32 @@ Fixes from previous version:
    downstream agents/report know 50.0 is a placeholder, not a research
    finding.
 
-RESOLVED (this version) — SEGMENT-FOLD SCOPE DECISION:
-data/companies.json was built with 7 segments (including a "Compute
-Platforms & Hyperscalers" segment for Microsoft/Amazon/TSMC/Broadcom/
-Meta). schema.py, ranking, and report converged on 5 segments per the
-project brief's Section 3.1 table. This loader folds the 7 segments down
-to 5 (hyperscaler segment -> "Compute / Servers", both power segments ->
-"Power Infrastructure") so nothing crashes downstream.
+SEGMENT-FOLD SCOPE DECISION: data/companies.json was built with 7 segments
+(including a "Compute Platforms & Hyperscalers" segment for Microsoft/
+Amazon/TSMC/Broadcom/Meta). schema.py, ranking, and report converged on 5
+segments per the project brief's Section 3.1 table. This loader folds the
+7 segments down to 5 (hyperscaler segment -> "Compute / Servers", both
+power segments -> "Power Infrastructure") so nothing crashes downstream.
+The buyer/operator vs. component-supplier distinction this fold collapses
+is preserved structurally via the `ai_factory_role` / `original_segment`
+fields below, not just described in prose.
 
-Previously this fold was described only in a code comment as "a real
-scope decision the team should confirm" with no actual mechanism enforcing
-or preserving that distinction — the concern (hyperscalers play a
-buyer/operator role, not a component-supplier role, so lumping Microsoft
-in with NVIDIA under one segment label risks reading them as
-apples-to-apples) was never structurally tracked anywhere past ingestion.
+FIX (this version) — SEGMENT FILTER WAS DEAD ON THE DATASET PATH: the
+dataset-loading branch (the one actually used whenever a curated JSON file
+is present, i.e. essentially every real run) never consulted
+state["segments"] at all — it always returned every company in the file
+regardless of what the caller asked for. Only the LLM-generation fallback
+branch (used when no dataset file exists) ever looked at `segments`. In
+practice this meant the Streamlit sidebar's "Filter Segments" multiselect
+had no effect on a normal run.
 
-This version makes the decision explicit and confirmed, and — more
-importantly — makes it AUDITABLE: every company dict now carries two new
-fields alongside its folded `segment`:
-  - `original_segment`: the company's pre-fold segment label exactly as
-    it appears in the source dataset (e.g. "Compute Platforms &
-    Hyperscalers"), preserved for traceability even though `segment`
-    itself is folded to one of the 5 pipeline segments.
-  - `ai_factory_role`: "component_supplier" (default) or "buyer_operator".
-    Set to "buyer_operator" only for companies whose original_segment was
-    "Compute Platforms & Hyperscalers" — i.e. companies that BUY/OPERATE
-    AI Factory infrastructure (Microsoft, Amazon, TSM, Broadcom, Meta,
-    etc.) rather than manufacture a component sold INTO the value chain.
-
-This doesn't change any ranking math or the 5-segment schema — it gives
-Report Agent (and any future analyst) a real field to query/filter/footnote
-on, instead of a scope decision buried in a comment that only a reader of
-this source file would ever see. Report Agent isn't updated in this pass
-to surface it yet; that's a natural next step once this field exists.
-
-Companies loaded via the LLM-generation or static-fallback paths (which
-only ever operate over the 5 pipeline segments, never the 7-segment
-scheme) get `ai_factory_role: "component_supplier"` and
-`original_segment` set equal to their (already 5-segment) `segment` —
-there's no hyperscaler category to distinguish in those paths, so no
-ambiguity exists there in the first place.
+Now `company_ingestion_node` filters `dataset_companies` down to the
+requested `segments` (matched against each company's already-folded
+5-segment `segment` field, since that's what the rest of the pipeline and
+the UI both operate on) before returning, on both the dataset path and the
+LLM path. If the filter would produce an empty list (e.g. a stale/bad
+segment name was passed in), it falls back to the unfiltered set rather
+than silently returning zero companies, and logs why.
 """
 
 import json
@@ -91,8 +77,8 @@ DEFAULT_SEGMENTS = [
 # "Compute Platforms & Hyperscalers" segment (Microsoft/Amazon/TSMC/Broadcom/
 # Meta) folds into "Compute / Servers" for ranking/report purposes. The
 # buyer/operator vs. component-supplier distinction this fold collapses is
-# now preserved structurally via ai_factory_role below, not just described
-# in prose.
+# preserved structurally via ai_factory_role below, not just described in
+# prose.
 SEGMENT_FOLD_MAP = {
     "Compute / AI Servers & GPUs": "Compute / Servers",
     "Compute Platforms & Hyperscalers": "Compute / Servers",
@@ -181,6 +167,34 @@ def _load_static_dataset() -> Optional[List[dict]]:
     return _load_dataset_file(FALLBACK_DATASET_PATH)
 
 
+def _filter_by_segments(companies: List[dict], requested_segments: Optional[List[str]]) -> List[dict]:
+    """
+    Restricts `companies` to those whose (already-folded) 5-segment
+    `segment` field is in `requested_segments`. This is the filter the
+    Streamlit "Filter Segments" multiselect (and any other caller) relies
+    on — previously it was applied nowhere on the dataset-loading path.
+
+    If requested_segments is empty/None, or filtering would zero out the
+    whole list (e.g. a stale segment name was passed in), returns
+    `companies` unfiltered rather than silently producing an empty
+    universe, and logs why.
+    """
+    if not requested_segments:
+        return companies
+
+    requested_set = set(requested_segments)
+    filtered = [c for c in companies if c.get("segment") in requested_set]
+
+    if not filtered:
+        print(f"[Company Ingestion] Requested segments {requested_segments} matched 0 "
+              f"companies — ignoring the filter and returning the full universe instead.")
+        return companies
+
+    print(f"[Company Ingestion] Filtered to {len(filtered)}/{len(companies)} companies "
+          f"for requested segments: {requested_segments}")
+    return filtered
+
+
 def _generate_via_llm(segments: List[str], per_segment: int = 4) -> List[dict]:
     """
     Round-robins across segments so no segment can be starved by an
@@ -239,11 +253,12 @@ def _generate_via_llm(segments: List[str], per_segment: int = 4) -> List[dict]:
 
 
 def company_ingestion_node(state: dict) -> dict:
-    segments = state.get("segments") or DEFAULT_SEGMENTS
+    requested_segments = state.get("segments") or None
 
     dataset_companies = _load_static_dataset()
     if dataset_companies:
         print(f"[Company Ingestion] Loaded {len(dataset_companies)} companies from dataset file.")
+        dataset_companies = _filter_by_segments(dataset_companies, requested_segments)
         n_buyer_operator = sum(1 for c in dataset_companies if c["ai_factory_role"] == "buyer_operator")
         if n_buyer_operator:
             print(f"[Company Ingestion] {n_buyer_operator} companies tagged 'buyer_operator' "
@@ -251,5 +266,6 @@ def company_ingestion_node(state: dict) -> dict:
         return {"companies": dataset_companies}
 
     print("[Company Ingestion] No dataset file found — generating via LLM instead.")
-    companies_list = _generate_via_llm(segments)
+    segments_for_llm = requested_segments or DEFAULT_SEGMENTS
+    companies_list = _generate_via_llm(segments_for_llm)
     return {"companies": companies_list}

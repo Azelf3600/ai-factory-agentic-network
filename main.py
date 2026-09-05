@@ -60,9 +60,22 @@ def build_pipeline_graph():
     return workflow.compile()
 
 
+# FIX: app.py does `from main import graph`, but this compiled graph was
+# previously only ever built inside `if __name__ == "__main__":` below —
+# which does NOT run when another module (like Streamlit's app.py) imports
+# this file. That left no module-level `graph` name to import at all,
+# causing "cannot import name 'graph' from 'main'" the moment app.py tried
+# to import it.
+#
+# Building it here, at module level, means `graph` exists as soon as
+# `main.py` is imported by anything (Streamlit, a test file, a notebook),
+# not just when this file is run directly via `python main.py`.
+graph = build_pipeline_graph()
+
+
 if __name__ == "__main__":
     print("Initializing AI Factory Growth Equity Pipeline...")
-    app = build_pipeline_graph()
+    app = graph  # module-level `graph` above is the same compiled pipeline
 
     initial_state = {
         "segments": [],

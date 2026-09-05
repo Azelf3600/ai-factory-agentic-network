@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Streamlit & Local Secrets
+.streamlit/
+secrets.toml
+.env.*

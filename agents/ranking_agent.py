@@ -42,7 +42,7 @@ def _index_flags_by_key(flags: List[dict]) -> Dict[str, List[dict]]:
 def calculate_tafgs(moat: int, margin_score: int, growth_cagr_pct: float) -> float:
     """Project spec Section 2, literal: TAFGS = (Moat x Margin Score) x Growth CAGR.
     Risk discount is NOT part of this formula — it's reported separately via
-    risk_notes/discount_pct so the ranking number matches the spec exactly."""
+    risk_notes/risk_discount_pct so the ranking number matches the spec exactly."""
     return round(moat * margin_score * growth_cagr_pct, 2)
 
 
@@ -73,6 +73,11 @@ def ranking_node(state: dict) -> dict:
         moat_val = (moat_rec or {}).get("score", 3)
         margin_pct = (margin_rec or {}).get("operating_margin_pct", 20.0)
         margin_score = (margin_rec or {}).get("score", 3)
+        # FIX: this was computed by Margin Analysis ("real" vs "estimated")
+        # but previously dropped here — nothing downstream (Streamlit's
+        # "Verified Margins (yfinance)" KPI, the master table) could ever
+        # see it, so that KPI always read 0/N regardless of actual data.
+        margin_source = (margin_rec or {}).get("source", "estimated")
         growth_val = (growth_rec or {}).get("cagr_pct", 20.0)
         risk_discount = (risk_rec or {}).get("discount_pct", 0.05)
         risk_notes = (risk_rec or {}).get("risk_notes", "Standard execution risk applied")
@@ -107,7 +112,9 @@ def ranking_node(state: dict) -> dict:
             "moat_score": moat_val,
             "operating_margin_pct": margin_pct,
             "margin_score": margin_score,
+            "margin_source": margin_source,
             "growth_cagr_pct": growth_val,
+            "risk_discount_pct": risk_discount,
             "risk_notes": risk_notes,
             "tafgs_score": tafgs,
             "unmatched": unmatched,
